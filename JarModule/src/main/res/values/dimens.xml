@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="browserxcorexdpx0">0dp</dimen>
+    <dimen name="browserxcorexdpx10">10dp</dimen>
+    <dimen name="browserxcorexdpx53">53dp</dimen>
+    <dimen name="browserxcorexdpx100">100dp</dimen>
+
+</resources>
