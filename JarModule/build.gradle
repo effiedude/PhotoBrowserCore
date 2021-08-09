@@ -1,4 +1,5 @@
 apply plugin:'com.android.library'
+apply from:'tools.gradle'
 
 group 'com.townspriter.android.photobrowser'
 ext.artifactId='core'

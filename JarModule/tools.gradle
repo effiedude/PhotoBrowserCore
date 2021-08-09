@@ -1,0 +1,30 @@
+apply plugin: 'maven'
+
+uploadArchives
+{
+    configuration=configurations.archives
+    repositories
+    {
+        mavenDeployer
+        {
+            snapshotRepository(url:MAVENxREPOxSNAPSHOTxURL)
+            {
+                authentication(userName:NEXUSxUSERNAME,password:NEXUSxPASSWORD)
+            }
+
+            repository(url:MAVENxREPOxRELEASExURL)
+            {
+                authentication(userName:NEXUSxUSERNAME,password:NEXUSxPASSWORD)
+            }
+
+            pom.project
+            {
+                version '1.0.0'
+                artifactId 'Core'
+                groupId 'com.personedu.browser'
+                packaging TYPE
+                description '图片浏览器基础模块'
+            }
+        }
+    }
+}
