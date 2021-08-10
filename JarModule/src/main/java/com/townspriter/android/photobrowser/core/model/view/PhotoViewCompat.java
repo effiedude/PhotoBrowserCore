@@ -221,10 +221,7 @@ public class PhotoViewCompat extends PhotoViewProxy
             int inSampleSize=calculateInSampleSizeIfDecoderRegion(photoViewBean);
             longPhotoAnalysator.setInSampleSize(inSampleSize);
             rect.right=rect.left+photoViewBean.width;
-            Logger.d(TAG,"SystemInfo.INSTANCE.getScreenWidth(getContext()):"+SystemInfo.INSTANCE.getScreenWidth(getContext()));
-            Logger.d(TAG,"SystemInfo.INSTANCE.getScreenHeight(getContext()):"+SystemInfo.INSTANCE.getScreenHeight(getContext()));
             rect.bottom=rect.top+SystemInfo.INSTANCE.getScreenHeight(getContext());
-            Logger.d(TAG,"downloadAndShowLongImage-rect:"+rect.toString());
             longPhotoAnalysator.setRegionRect(rect);
             setLongPhotoAnalysator(longPhotoAnalysator);
             ThreadManager.post(ThreadManager.THREADxWORK,new Runnable()
