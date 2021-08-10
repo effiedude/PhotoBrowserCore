@@ -19,8 +19,7 @@ allprojects
         jcenter()
         maven
         {
-            url'https://jitpack.io'
-            credentials{ username 'jp_nsqeiq0rjdvafvgo4l1270qu1e'}
+            url 'http://10.58.220.5:8081/repository/maven-releases/'
         }
     }
 }

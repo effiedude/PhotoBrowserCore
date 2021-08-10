@@ -22,10 +22,10 @@ import android.widget.ImageView;
 public class LongPhotoAnalysator implements LongPhotoAnalysable
 {
     private final String TAG="LongPhotoAnalysator";
+    private final BitmapFactory.Options mOptions=new BitmapFactory.Options();
     private int mOriginBitmapHeight;
     private volatile Rect mRegionRect;
     private BitmapRegionDecoder mRegionDecoder;
-    private final BitmapFactory.Options mOptions=new BitmapFactory.Options();
     
     public void setInSampleSize(int inSampleSize)
     {
@@ -115,12 +115,12 @@ public class LongPhotoAnalysator implements LongPhotoAnalysable
             mRegionRect.top=mOriginBitmapHeight-height;
         }
         mRegionRect.bottom=mRegionRect.top+height;
+        Logger.d(TAG,"reloadBitmapIfNeeded-mRegionRect:"+mRegionRect.toString());
         if(mRegionDecoder!=null)
         {
             try
             {
-                Bitmap bitmap=mRegionDecoder.decodeRegion(mRegionRect,mOptions);
-                imageView.setImageDrawable(new BitmapDrawable(null,bitmap));
+                imageView.setImageBitmap(mRegionDecoder.decodeRegion(mRegionRect,mOptions));
                 return true;
             }
             catch(Exception exception)

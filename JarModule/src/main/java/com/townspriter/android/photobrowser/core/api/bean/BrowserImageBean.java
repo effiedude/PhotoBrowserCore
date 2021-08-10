@@ -19,9 +19,9 @@ import androidx.annotation.Nullable;
  */
 public class BrowserImageBean extends ImageBean implements JsonConstant
 {
-    public static final int IMAGE_NORMAL=0;
-    public static final int IMAGE_GIF=1;
-    public static final int IMAGE_LONG=2;
+    public static final int IMAGExNORMAL=0;
+    public static final int IMAGExGIF=1;
+    public static final int IMAGExLONG=2;
     /** 图片类型.服务器端返回的是图片格式的后缀.需要转换之后才能继续使用 */
     private int type;
     private String title;
@@ -108,15 +108,15 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
         title=jsonObj.optString(TITLE);
         if("gif".equalsIgnoreCase(getType()))
         {
-            type=IMAGE_GIF;
+            type=IMAGExGIF;
         }
         else if("long".equalsIgnoreCase(getType()))
         {
-            type=IMAGE_LONG;
+            type=IMAGExLONG;
         }
         else
         {
-            type=IMAGE_NORMAL;
+            type=IMAGExNORMAL;
         }
     }
 }

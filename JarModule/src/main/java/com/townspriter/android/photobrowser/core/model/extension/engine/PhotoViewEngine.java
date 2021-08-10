@@ -695,7 +695,7 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
         {
             return;
         }
-        if(getScale()==getMinimumScale()&&getImageType()!=BrowserImageBean.IMAGE_LONG)
+        if(getScale()==getMinimumScale()&&getImageType()!=BrowserImageBean.IMAGExLONG)
         {
             int alphaValue=PHOTOxBGxALPHA-(int)((mDraggedDistanceY/SCREEN_HEIGHT)*PHOTOxBGxALPHA>PHOTOxBGxALPHA?PHOTOxBGxALPHA:(mDraggedDistanceY/SCREEN_HEIGHT)*PHOTOxBGxALPHA);
             onBackgroundAlphaChangingByGesture(alphaValue);
@@ -739,7 +739,7 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
             Logger.i(TAG,"onDragRelease:RETURN");
             return;
         }
-        if(getScale()==getMinimumScale()&&getImageType()!=BrowserImageBean.IMAGE_LONG)
+        if(getScale()==getMinimumScale()&&getImageType()!=BrowserImageBean.IMAGExLONG)
         {
             mScaleDragDetector.setIsReleasing(true);
             ImageView imageView=getImageView();
@@ -991,7 +991,7 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
             mScrollEdge=EDGE_NONE;
         }
         // 根据不同的图片类型选择不同的平移矩阵
-        if(getScale()==getMinimumScale()&&getImageType()!=BrowserImageBean.IMAGE_LONG)
+        if(getScale()==getMinimumScale()&&getImageType()!=BrowserImageBean.IMAGExLONG)
         {
             mSuppMatrix.postTranslate(deltaX,0);
         }

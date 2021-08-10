@@ -3,23 +3,29 @@ apply plugin: 'maven'
 uploadArchives
 {
     configuration=configurations.archives
+    
     repositories
     {
         mavenDeployer
         {
-            snapshotRepository(url:MAVENxREPOxSNAPSHOTxURL)
+            if(VERSIONxNAME.contains('SNAPSHOT'))
             {
-                authentication(userName:NEXUSxUSERNAME,password:NEXUSxPASSWORD)
+                snapshotRepository(url:MAVENxREPOxSNAPSHOTxURL)
+                {
+                    authentication(userName:NEXUSxUSERNAME,password:NEXUSxPASSWORD)
+                }
             }
-
-            repository(url:MAVENxREPOxRELEASExURL)
+            else
             {
-                authentication(userName:NEXUSxUSERNAME,password:NEXUSxPASSWORD)
+                repository(url:MAVENxREPOxRELEASExURL)
+                {
+                    authentication(userName:NEXUSxUSERNAME,password:NEXUSxPASSWORD)
+                }
             }
 
             pom.project
             {
-                version '1.0.0'
+                version VERSIONxNAME
                 artifactId 'Core'
                 groupId 'com.personedu.browser'
                 packaging TYPE

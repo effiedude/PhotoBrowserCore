@@ -116,13 +116,13 @@ public class PhotoViewCompat extends PhotoViewProxy
             Logger.d(TAG,"bindData-photoViewBean.getTypeInt():"+photoViewBean.getTypeInt());
             switch(photoViewBean.getTypeInt())
             {
-                case BrowserImageBean.IMAGE_LONG:
+                case BrowserImageBean.IMAGExLONG:
                     downloadAndShowLongImage(photoViewBean);
                     break;
-                case BrowserImageBean.IMAGE_GIF:
+                case BrowserImageBean.IMAGExGIF:
                     downloadAndShowGif(photoViewBean);
                     break;
-                case BrowserImageBean.IMAGE_NORMAL:
+                case BrowserImageBean.IMAGExNORMAL:
                 default:
                     downloadAndShowNormalImage(photoViewBean);
                     break;
@@ -211,7 +211,7 @@ public class PhotoViewCompat extends PhotoViewProxy
         if(useLongPhotoAnalysator)
         {
             // 更新图片缩放类型
-            setScaleTypeSafely(ScaleType.CENTER_INSIDE);
+            setScaleTypeSafely(ScaleType.CENTER);
             final LongPhotoAnalysator longPhotoAnalysator=new LongPhotoAnalysator();
             longPhotoAnalysator.setOriginBitmapHeight(photoViewBean.height);
             // 设置图片分块读取区域
@@ -221,7 +221,10 @@ public class PhotoViewCompat extends PhotoViewProxy
             int inSampleSize=calculateInSampleSizeIfDecoderRegion(photoViewBean);
             longPhotoAnalysator.setInSampleSize(inSampleSize);
             rect.right=rect.left+photoViewBean.width;
-            rect.bottom=rect.top+photoViewBean.width*SystemInfo.INSTANCE.getScreenWidth(getContext())/SystemInfo.INSTANCE.getScreenHeight(getContext());
+            Logger.d(TAG,"SystemInfo.INSTANCE.getScreenWidth(getContext()):"+SystemInfo.INSTANCE.getScreenWidth(getContext()));
+            Logger.d(TAG,"SystemInfo.INSTANCE.getScreenHeight(getContext()):"+SystemInfo.INSTANCE.getScreenHeight(getContext()));
+            rect.bottom=rect.top+SystemInfo.INSTANCE.getScreenHeight(getContext());
+            Logger.d(TAG,"downloadAndShowLongImage-rect:"+rect.toString());
             longPhotoAnalysator.setRegionRect(rect);
             setLongPhotoAnalysator(longPhotoAnalysator);
             ThreadManager.post(ThreadManager.THREADxWORK,new Runnable()
