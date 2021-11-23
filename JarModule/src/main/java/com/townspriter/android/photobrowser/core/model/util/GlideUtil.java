@@ -1,7 +1,7 @@
 package com.townspriter.android.photobrowser.core.model.util;
 
 import com.bumptech.glide.Glide;
-import com.townspriter.android.foundation.utils.concurrent.ThreadManager;
+import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import android.content.Context;
 import android.os.Looper;
 

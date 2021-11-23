@@ -1,13 +1,12 @@
 package com.townspriter.android.photobrowser.core.model.extension;
 
 import java.io.InputStream;
-import com.townspriter.android.foundation.utils.io.IOUtil;
-import com.townspriter.android.foundation.utils.log.Logger;
+import com.townspriter.base.foundation.utils.io.IOUtil;
+import com.townspriter.base.foundation.utils.log.Logger;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.widget.ImageView;
 
 /******************************************************************************

@@ -1,8 +1,8 @@
 package com.townspriter.android.photobrowser.core.model.view;
 
-import com.townspriter.android.foundation.utils.log.Logger;
-import com.townspriter.android.foundation.utils.ui.ResHelper;
 import com.townspriter.android.photobrowser.core.R;
+import com.townspriter.base.foundation.utils.log.Logger;
+import com.townspriter.base.foundation.utils.ui.ResHelper;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -45,7 +45,7 @@ public class PhotoViewPager extends ViewPager
         // 设置背景黑色保持跟其它图层背景颜色一致.防止出现白边
         setBackgroundColor(Color.TRANSPARENT);
         setPageMargin(ResHelper.getDimenInt(R.dimen.browserxcorexdpx0));
-        setPageMarginDrawable(new ColorDrawable(ResHelper.getColor(R.color.valuexcolorxtranslate)));
+        setPageMarginDrawable(new ColorDrawable(ResHelper.getColor(R.color.resxcolorxtranslate)));
     }
     
     private void requestParentDisallowInterceptTouchEvent(boolean disallowIntercept)

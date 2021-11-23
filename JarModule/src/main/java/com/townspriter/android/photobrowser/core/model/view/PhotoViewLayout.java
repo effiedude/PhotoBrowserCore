@@ -1,13 +1,13 @@
 package com.townspriter.android.photobrowser.core.model.view;
 
 import com.bumptech.glide.Glide;
-import com.townspriter.android.foundation.utils.concurrent.ThreadManager;
-import com.townspriter.android.foundation.utils.log.Logger;
-import com.townspriter.android.foundation.utils.net.NetworkUtil;
-import com.townspriter.android.foundation.utils.ui.ResHelper;
 import com.townspriter.android.photobrowser.core.R;
 import com.townspriter.android.photobrowser.core.api.view.IPhotoBrowserOverlay;
 import com.townspriter.android.photobrowser.core.model.listener.OnPhotoLoadListener;
+import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
+import com.townspriter.base.foundation.utils.log.Logger;
+import com.townspriter.base.foundation.utils.net.NetworkUtil;
+import com.townspriter.base.foundation.utils.ui.ResHelper;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.ViewGroup;

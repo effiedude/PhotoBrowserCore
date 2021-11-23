@@ -27,7 +27,7 @@ uploadArchives
             {
                 version VERSIONxNAME
                 artifactId 'Core'
-                groupId 'com.personedu.browser'
+                groupId 'com.townspriter.photobrowser'
                 packaging TYPE
                 description '图片浏览器基础模块'
             }

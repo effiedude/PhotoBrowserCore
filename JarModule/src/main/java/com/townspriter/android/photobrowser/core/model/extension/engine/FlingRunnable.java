@@ -1,8 +1,8 @@
 package com.townspriter.android.photobrowser.core.model.extension.engine;
 
-import com.townspriter.android.foundation.utils.log.Logger;
 import com.townspriter.android.photobrowser.core.model.scroll.BaseScrollerProxy;
 import com.townspriter.android.photobrowser.core.model.util.AnimationCompat;
+import com.townspriter.base.foundation.utils.log.Logger;
 import android.content.Context;
 import android.graphics.RectF;
 import android.widget.ImageView;

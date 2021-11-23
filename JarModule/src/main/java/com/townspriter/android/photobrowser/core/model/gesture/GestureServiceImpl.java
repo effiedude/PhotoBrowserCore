@@ -2,10 +2,11 @@ package com.townspriter.android.photobrowser.core.model.gesture;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.townspriter.android.foundation.utils.log.Logger;
-import com.townspriter.android.foundation.utils.system.SystemInfo;
-import com.townspriter.android.foundation.utils.ui.ResHelper;
 import com.townspriter.android.photobrowser.core.api.listener.OnGestureListener;
+import com.townspriter.base.foundation.utils.log.Logger;
+import com.townspriter.base.foundation.utils.system.SystemInfo;
+import com.townspriter.base.foundation.utils.ui.ResHelper;
+
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;

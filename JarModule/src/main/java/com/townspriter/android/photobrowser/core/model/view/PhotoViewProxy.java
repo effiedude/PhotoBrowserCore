@@ -1,6 +1,5 @@
 package com.townspriter.android.photobrowser.core.model.view;
 
-import com.townspriter.android.foundation.utils.log.Logger;
 import com.townspriter.android.photobrowser.core.api.listener.OnGestureListener;
 import com.townspriter.android.photobrowser.core.api.listener.OnPhotoTapListener;
 import com.townspriter.android.photobrowser.core.api.listener.OnViewTapListener;
@@ -10,6 +9,8 @@ import com.townspriter.android.photobrowser.core.model.extension.engine.PhotoVie
 import com.townspriter.android.photobrowser.core.model.listener.OnMatrixChangedListener;
 import com.townspriter.android.photobrowser.core.model.listener.OnScaleChangeListener;
 import com.townspriter.android.photobrowser.core.model.listener.OnScrollListener;
+import com.townspriter.base.foundation.utils.log.Logger;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;

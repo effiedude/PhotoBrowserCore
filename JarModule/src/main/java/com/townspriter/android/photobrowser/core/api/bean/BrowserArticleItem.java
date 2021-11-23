@@ -4,8 +4,9 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.townspriter.android.foundation.utils.log.Logger;
 import com.townspriter.android.photobrowser.core.api.constant.JsonConstant;
+import com.townspriter.base.foundation.utils.log.Logger;
+
 import androidx.annotation.Nullable;
 
 /******************************************************************************

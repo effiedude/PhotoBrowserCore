@@ -1,8 +1,8 @@
 package com.townspriter.android.photobrowser.core.model.util;
 
 import java.io.InputStream;
-import com.townspriter.android.foundation.utils.lang.AssertUtil;
-import com.townspriter.android.foundation.utils.system.SystemInfo;
+import com.townspriter.base.foundation.utils.lang.AssertUtil;
+import com.townspriter.base.foundation.utils.system.SystemInfo;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

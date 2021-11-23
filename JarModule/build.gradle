@@ -1,8 +1,8 @@
 apply plugin:'com.android.library'
 apply from:'tools.gradle'
 
-group 'com.townspriter.android.photobrowser'
-ext.artifactId='core'
+group 'com.townspriter.photobrowser'
+ext.artifactId='Core'
 
 android
 {
@@ -30,23 +30,28 @@ android
     }
 }
 
+configurations.all
+{
+    //动态版本(版本号会变)
+    resolutionStrategy.cacheDynamicVersionsFor 10,'minutes'
+    //变化模块(版本号永远不变.但是内容发生变化)
+    resolutionStrategy.cacheChangingModulesFor 0,'minutes'
+}
+
 dependencies
 {
-    //implementation project(':Value')
-    //implementation project(':Foundation')
-
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.versionedparcelable:versionedparcelable:1.1.0'
     implementation 'androidx.core:core:1.1.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.0.0'
 
-    //implementation 'com.github.effiedude:Value:1.0.1'
-    //implementation 'com.github.effiedude:Foundation:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.github.effiedude:CommonRes:1.0.2'
+    implementation 'com.github.effiedude:Foundation:1.0.3'
 
-    implementation 'com.personedu.base:CommonRes:1.0.0'
-    implementation 'com.personedu.base:Foundation:1.0.6'
+    //implementation 'com.townspriter.base:CommonRes:1.0.0'
+    //implementation 'com.townspriter.base:Foundation:1.0.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -58,8 +63,8 @@ task deleteOldJar(type:Delete) {delete 'food/PhotoBrowserCore.aar'}
 task exportJar(type:Copy){
     from('build/outputs/aar/')
     into('food/')
-    include('PhotoBrowserCore-release.aar')
-    rename('PhotoBrowserCore-release.aar','PhotoBrowserCore.aar')
+    include('JarModule-release.aar')
+    rename('JarModule-release.aar','PhotoBrowserCore.aar')
 }
 
 exportJar.dependsOn(deleteOldJar,build)

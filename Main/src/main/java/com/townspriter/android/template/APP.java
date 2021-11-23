@@ -1,8 +1,5 @@
 package com.townspriter.android.template;
 
-import com.townspriter.android.foundation.Foundation;
-import com.townspriter.android.foundation.utils.log.LogImpl;
-import com.townspriter.android.foundation.utils.log.Logger;
 import android.app.Application;
 
 /******************************************************************************
@@ -27,8 +24,5 @@ public class APP extends Application
     }
     
     private void initData()
-    {
-        Foundation.init(this);
-        Logger.setLoggerImpl(new LogImpl(APPxTAG));
-    }
+    {}
 }

@@ -6,9 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
 import com.bumptech.glide.Glide;
-import com.townspriter.android.foundation.utils.concurrent.ThreadManager;
-import com.townspriter.android.foundation.utils.io.IOUtil;
-import com.townspriter.android.foundation.utils.log.Logger;
+import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
+import com.townspriter.base.foundation.utils.io.IOUtil;
+import com.townspriter.base.foundation.utils.log.Logger;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -1,7 +1,8 @@
 package com.townspriter.android.photobrowser.core.model.gesture;
 
-import com.townspriter.android.foundation.utils.log.Logger;
 import com.townspriter.android.photobrowser.core.model.extension.engine.PhotoViewEngine;
+import com.townspriter.base.foundation.utils.log.Logger;
+
 import android.graphics.RectF;
 import android.view.GestureDetector;
 import android.view.MotionEvent;

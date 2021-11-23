@@ -1,9 +1,6 @@
 package com.townspriter.android.photobrowser.core.api;
 
 import java.util.List;
-import com.townspriter.android.foundation.utils.collection.CollectionUtil;
-import com.townspriter.android.foundation.utils.log.Logger;
-import com.townspriter.android.foundation.utils.ui.ViewUtils;
 import com.townspriter.android.photobrowser.core.R;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserArticleItem;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
@@ -18,6 +15,9 @@ import com.townspriter.android.photobrowser.core.model.util.LogUtil;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewCompat;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewLayout;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewPager;
+import com.townspriter.base.foundation.utils.collection.CollectionUtil;
+import com.townspriter.base.foundation.utils.log.Logger;
+import com.townspriter.base.foundation.utils.ui.ViewUtils;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
@@ -27,7 +27,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -43,8 +42,8 @@ import androidx.viewpager.widget.ViewPager;
  */
 public class PhotoBrowser extends FrameLayout
 {
-    private final String TAG="PhotoBrowser";
     public static ViewUtils.Orientation mCurrentOrientation;
+    private final String TAG="PhotoBrowser";
     private @Nullable List<BrowserImageBean> mPhotoViewBeans;
     private PhotoViewPager mViewPager;
     private PhotoViewPagerAdapter mAdapter;
