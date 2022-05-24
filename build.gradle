@@ -2,12 +2,13 @@ buildscript
 {
     repositories
     {
-        google()
-        jcenter()
+        maven {url ALIxREPOxPUBLICxURL}
+        maven {url ALIxREPOxGOOGLExURL}
+        maven {url GITxREPOxPUBLICxURL}
     }
     dependencies
     {
-        classpath "com.android.tools.build:gradle:4.0.1"
+        classpath "com.android.tools.build:gradle:4.0.2"
     }
 }
 
@@ -15,16 +16,9 @@ allprojects
 {
     repositories
     {
-        google()
-        jcenter()
-        maven
-        {
-            url MAVENxREPOxPUBLICxURL
-        }
-        maven
-        {
-            url GITxREPOxPUBLICxURL
-        }
+        maven {url ALIxREPOxPUBLICxURL}
+        maven {url ALIxREPOxGOOGLExURL}
+        maven {url GITxREPOxPUBLICxURL}
     }
 }
 

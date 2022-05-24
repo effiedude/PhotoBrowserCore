@@ -50,9 +50,6 @@ dependencies
     implementation 'com.github.effiedude:CommonRes:1.0.2'
     implementation 'com.github.effiedude:Foundation:1.0.3'
 
-    //implementation 'com.townspriter.base:CommonRes:1.0.0'
-    //implementation 'com.townspriter.base:Foundation:1.0.0'
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
