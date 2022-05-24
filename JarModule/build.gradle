@@ -47,7 +47,6 @@ dependencies
     implementation 'androidx.appcompat:appcompat:1.0.0'
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'com.github.effiedude:CommonRes:1.0.2'
     implementation 'com.github.effiedude:Foundation:1.0.3'
 
     testImplementation 'junit:junit:4.12'

@@ -45,7 +45,7 @@ public class PhotoViewPager extends ViewPager
         // 设置背景黑色保持跟其它图层背景颜色一致.防止出现白边
         setBackgroundColor(Color.TRANSPARENT);
         setPageMargin(ResHelper.getDimenInt(R.dimen.browserxcorexdpx0));
-        setPageMarginDrawable(new ColorDrawable(ResHelper.getColor(R.color.resxcolorxtranslate)));
+        setPageMarginDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
     
     private void requestParentDisallowInterceptTouchEvent(boolean disallowIntercept)
