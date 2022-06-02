@@ -23,7 +23,7 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
     public static final int IMAGExGIF=1;
     public static final int IMAGExLONG=2;
     /** 图片类型.服务器端返回的是图片格式的后缀.需要转换之后才能继续使用 */
-    private int type;
+    private int imageType;
     private String title;
     
     /**
@@ -86,7 +86,7 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
     
     public int getTypeInt()
     {
-        return type;
+        return imageType;
     }
     
     @Override
@@ -108,15 +108,15 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
         title=jsonObj.optString(TITLE);
         if("gif".equalsIgnoreCase(getType()))
         {
-            type=IMAGExGIF;
+            imageType =IMAGExGIF;
         }
         else if("long".equalsIgnoreCase(getType()))
         {
-            type=IMAGExLONG;
+            imageType =IMAGExLONG;
         }
         else
         {
-            type=IMAGExNORMAL;
+            imageType =IMAGExNORMAL;
         }
     }
 }
