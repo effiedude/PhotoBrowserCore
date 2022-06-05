@@ -1,6 +1,7 @@
 package com.townspriter.android.photobrowser.core.api;
 
 import java.util.List;
+
 import com.townspriter.android.photobrowser.core.R;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserArticleItem;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
@@ -18,6 +19,7 @@ import com.townspriter.android.photobrowser.core.model.view.PhotoViewPager;
 import com.townspriter.base.foundation.utils.collection.CollectionUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.ui.ViewUtils;
+
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
@@ -27,6 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -55,18 +58,22 @@ public class PhotoBrowser extends FrameLayout
     private @Nullable ViewGroup mTopBar;
     private @Nullable ViewGroup mBottomBar;
     private @Nullable ViewGroup mToolbar;
-    private int mTotalSize;
     private int mCurrentPageIndex;
     private final ViewPager.OnPageChangeListener mPageChangeListener=new ViewPager.OnPageChangeListener()
     {
         @Override
         public void onPageScrolled(final int position,final float positionOffset,final int positionOffsetPixels)
-        {}
+        {
+            mCurrentPageIndex=position;
+            if(null!=mCallback)
+            {
+                mCallback.onPageChanged(mAdapter.getCount(),mCurrentPageIndex+1);
+            }
+        }
         
         @Override
         public void onPageSelected(final int index)
         {
-            mCurrentPageIndex=index;
             if(mPhotoViewBeans==null||mPhotoViewBeans.get(index)==null)
             {
                 LogUtil.logW(TAG,"onPageSelected-mPhotoViewBeans:NULL");
@@ -88,10 +95,6 @@ public class PhotoBrowser extends FrameLayout
             if(photoViewCompat!=null)
             {
                 photoViewCompat.resetMatrix();
-                if(null!=mCallback)
-                {
-                    mCallback.onPageChanged(mTotalSize,index+1);
-                }
             }
             else
             {
@@ -238,7 +241,7 @@ public class PhotoBrowser extends FrameLayout
         mCallback=callback;
         if(null!=mCallback)
         {
-            mCallback.onPageChanged(mTotalSize,mCurrentPageIndex+1);
+            mCallback.onPageChanged(mAdapter.getCount(),mCurrentPageIndex+1);
         }
         if(mAdapter!=null)
         {
@@ -269,6 +272,14 @@ public class PhotoBrowser extends FrameLayout
             return null;
         }
         return mPhotoViewBeans.get(mCurrentPageIndex).url;
+    }
+    
+    public void deleteImage(int position)
+    {
+        if(mAdapter!=null)
+        {
+            mAdapter.deleteItem(position);
+        }
     }
     
     /**
@@ -387,16 +398,15 @@ public class PhotoBrowser extends FrameLayout
         mAdapter.setViewData(mPhotoViewBeans);
         mViewPager.setAdapter(mAdapter);
         /** 图片的索引从0开始.检查索引值.限制在合理的范围内 */
-        mTotalSize=mPhotoViewBeans.size();
         mCurrentPageIndex=browserArticleItem.imageIndex;
         Logger.d(TAG,"dealWithData-mCurrentPageIndex:"+mCurrentPageIndex);
         if(mCurrentPageIndex<0)
         {
             mCurrentPageIndex=0;
         }
-        else if(mCurrentPageIndex>=mTotalSize)
+        else if(mCurrentPageIndex>=mAdapter.getCount())
         {
-            mCurrentPageIndex=mTotalSize-1;
+            mCurrentPageIndex=mAdapter.getCount()-1;
         }
         mViewPager.setCurrentItem(mCurrentPageIndex);
     }

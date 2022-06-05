@@ -1,6 +1,7 @@
 package com.townspriter.android.photobrowser.core.model.adapter;
 
 import java.util.List;
+
 import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
 import com.townspriter.android.photobrowser.core.api.listener.OnGestureListener;
 import com.townspriter.android.photobrowser.core.api.listener.OnPhotoTapListener;
@@ -12,10 +13,12 @@ import com.townspriter.android.photobrowser.core.model.view.PhotoViewCompat;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewLayout;
 import com.townspriter.base.foundation.utils.collection.CollectionUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
@@ -46,6 +49,15 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     public PhotoViewPagerAdapter(Context context)
     {
         mContext=context;
+    }
+    
+    public void deleteItem(int position)
+    {
+        if(!CollectionUtil.isEmpty(mPhotoViewBeans))
+        {
+            mPhotoViewBeans.remove(position);
+            notifyDataSetChanged();
+        }
     }
     
     public void setViewData(@NonNull List<BrowserImageBean> imageBeans)
