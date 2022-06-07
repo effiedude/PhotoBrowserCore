@@ -280,6 +280,13 @@ public class PhotoBrowser extends FrameLayout
     {
         if(mAdapter!=null)
         {
+            if(mCurrentPageIndex < mAdapter.getCount())
+            {
+                if(null!=mCallback)
+                {
+                    mCallback.onPageChanged(mAdapter.getCount()-1,mCurrentPageIndex+1);
+                }
+            }
             mAdapter.deleteItem(position);
         }
     }
