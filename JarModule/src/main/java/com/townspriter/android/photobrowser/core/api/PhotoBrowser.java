@@ -64,16 +64,13 @@ public class PhotoBrowser extends FrameLayout
         @Override
         public void onPageScrolled(final int position,final float positionOffset,final int positionOffsetPixels)
         {
-            mCurrentPageIndex=position;
-            if(null!=mCallback)
-            {
-                mCallback.onPageChanged(mAdapter.getCount(),mCurrentPageIndex+1);
-            }
+            LogUtil.logD(TAG, "onPageScrolled-position:"+position);
         }
         
         @Override
         public void onPageSelected(final int index)
         {
+            LogUtil.logD(TAG, "onPageSelected-index:"+index);
             if(mPhotoViewBeans==null||mPhotoViewBeans.get(index)==null)
             {
                 LogUtil.logW(TAG,"onPageSelected-mPhotoViewBeans:NULL");
@@ -99,6 +96,11 @@ public class PhotoBrowser extends FrameLayout
             else
             {
                 LogUtil.logW(TAG,"onPageSelected-photoViewCompat:NULL");
+            }
+            mCurrentPageIndex=index;
+            if(null!=mCallback)
+            {
+                mCallback.onPageChanged(mAdapter.getCount(),mCurrentPageIndex+1);
             }
         }
         
