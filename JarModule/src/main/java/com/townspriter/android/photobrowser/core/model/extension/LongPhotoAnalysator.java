@@ -1,6 +1,7 @@
 package com.townspriter.android.photobrowser.core.model.extension;
 
 import java.io.InputStream;
+
 import com.townspriter.base.foundation.utils.io.IOUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import android.graphics.Bitmap;
@@ -28,10 +29,7 @@ public class LongPhotoAnalysator implements LongPhotoAnalysable
     
     public void setInSampleSize(int inSampleSize)
     {
-        if(mOptions!=null)
-        {
-            mOptions.inSampleSize=inSampleSize;
-        }
+        mOptions.inSampleSize=inSampleSize;
     }
     
     @Override
@@ -72,8 +70,7 @@ public class LongPhotoAnalysator implements LongPhotoAnalysable
             {
                 mRegionDecoder=BitmapRegionDecoder.newInstance(is,false);
             }
-            Bitmap bitmap=mRegionDecoder.decodeRegion(mRegionRect,mOptions);
-            return bitmap;
+            return mRegionDecoder.decodeRegion(mRegionRect,mOptions);
         }
         catch(Exception exception)
         {
@@ -89,7 +86,6 @@ public class LongPhotoAnalysator implements LongPhotoAnalysable
     @Override
     public boolean reloadBitmapIfNeeded(ImageView imageView,float dragDistance)
     {
-        Logger.d(TAG,"reloadBitmapIfNeeded-dragDistance:"+dragDistance);
         if(mRegionRect==null)
         {
             Logger.w(TAG,"reloadBitmapIfNeeded-mRegionRect:NULL");

@@ -43,7 +43,7 @@ public class PhotoViewLayout extends RelativeLayout implements OnPhotoLoadListen
     {
         removeAllViews();
         setBackgroundColor(Color.TRANSPARENT);
-        LayoutParams layoutParams=new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
         mPhotoView=new PhotoViewCompat(getContext());
         mPhotoView.setBackgroundColor(Color.TRANSPARENT);
         mPhotoView.setPhotoLoadListener(this);

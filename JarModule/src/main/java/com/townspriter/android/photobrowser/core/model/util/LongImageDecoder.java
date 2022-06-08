@@ -21,23 +21,21 @@ public class LongImageDecoder
     public static int calculateInSampleSize(int outWidth,int outHeight,int reqWidth,int reqHeight)
     {
         // 源图片的高度和宽度
-        final int height=outHeight;
-        final int width=outWidth;
         final int halfHeight;
         final int halfWidth;
         int inSampleSize=1;
-        if(height>reqHeight||width>reqWidth)
+        if(outHeight >reqHeight|| outWidth >reqWidth)
         {
             // 计算出实际宽高和目标宽高的比率
-            halfHeight=height/2;
-            halfWidth=width/2;
+            halfHeight= outHeight /2;
+            halfWidth= outWidth /2;
             // 选择宽和高中最小的比率作为inSampleSize的值.这样可以保证最终图片的宽和高一定都会大于等于目标的宽和高
             while((halfHeight/inSampleSize)>reqHeight&&(halfWidth/inSampleSize)>reqWidth)
             {
                 inSampleSize*=2;
             }
         }
-        while((DeviceOpenGLUtil.getGLESLimitTexture()>0)&&(DeviceOpenGLUtil.getGLESLimitTexture()<(height/inSampleSize)))
+        while((DeviceOpenGLUtil.getGLESLimitTexture()>0)&&(DeviceOpenGLUtil.getGLESLimitTexture()<(outHeight /inSampleSize)))
         {
             inSampleSize*=2;
         }

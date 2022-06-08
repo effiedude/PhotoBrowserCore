@@ -13,6 +13,7 @@ import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
 import com.townspriter.android.photobrowser.core.model.extension.IPhotoView;
 import com.townspriter.android.photobrowser.core.model.extension.LongPhotoAnalysator;
 import com.townspriter.android.photobrowser.core.model.listener.OnPhotoLoadListener;
+import com.townspriter.android.photobrowser.core.model.util.LogUtil;
 import com.townspriter.android.photobrowser.core.model.util.LongImageDecoder;
 import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import com.townspriter.base.foundation.utils.io.IOUtil;
@@ -23,6 +24,8 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.widget.RelativeLayout;
+
 import androidx.annotation.Nullable;
 
 /******************************************************************************
@@ -165,8 +168,7 @@ public class PhotoViewCompat extends PhotoViewProxy
          * 如果是大长图且对图片解码做了缩小.为了保障大长图的清晰度.进行分块加载
          * 或者是大长图原图解码.但是图片对比于屏幕比例高度为屏幕高度的两倍以上.这种情况为了减小内存消耗也进行分块加载
          */
-        boolean useRegionDecoder=inSampleSize>=2||(inSampleSize==1&&reqHeight>screenSizeDouble);
-        return useRegionDecoder;
+        return inSampleSize>=2||(inSampleSize==1&&reqHeight>screenSizeDouble);
     }
     
     /**
@@ -180,8 +182,7 @@ public class PhotoViewCompat extends PhotoViewProxy
     private int calculateInSampleSizeIfDecoderRegion(BrowserImageBean photoViewBean)
     {
         int reqWidth=SystemInfo.INSTANCE.getScreenWidth(getContext());
-        int width=photoViewBean.width;
-        int halfWidth=width;
+        int halfWidth= photoViewBean.width/2;
         int inSampleSize=1;
         while(halfWidth>reqWidth)
         {
@@ -207,8 +208,8 @@ public class PhotoViewCompat extends PhotoViewProxy
     
     private void downloadAndShowLongImage(final BrowserImageBean photoViewBean)
     {
-        boolean useLongPhotoAnalysator=ifUseRegionDecoderWhenImageLong(photoViewBean);
-        if(useLongPhotoAnalysator)
+        boolean useLongPhotoAnalyse=ifUseRegionDecoderWhenImageLong(photoViewBean);
+        if(useLongPhotoAnalyse)
         {
             // 更新图片缩放类型
             setScaleTypeSafely(ScaleType.CENTER);
@@ -221,7 +222,7 @@ public class PhotoViewCompat extends PhotoViewProxy
             int inSampleSize=calculateInSampleSizeIfDecoderRegion(photoViewBean);
             longPhotoAnalysator.setInSampleSize(inSampleSize);
             rect.right=rect.left+photoViewBean.width;
-            rect.bottom=rect.top+SystemInfo.INSTANCE.getScreenHeight(getContext());
+            rect.bottom=rect.top+SystemInfo.INSTANCE.getScreenHeight(getContext())*2;
             longPhotoAnalysator.setRegionRect(rect);
             setLongPhotoAnalysator(longPhotoAnalysator);
             ThreadManager.post(ThreadManager.THREADxWORK,new Runnable()
