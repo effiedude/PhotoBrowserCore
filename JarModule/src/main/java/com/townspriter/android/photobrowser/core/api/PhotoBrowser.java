@@ -62,9 +62,7 @@ public class PhotoBrowser extends FrameLayout
     {
         @Override
         public void onPageScrolled(final int position,final float positionOffset,final int positionOffsetPixels)
-        {
-            LogUtil.logD(TAG, "onPageScrolled-position:"+position);
-        }
+        {}
         
         @Override
         public void onPageSelected(final int index)
