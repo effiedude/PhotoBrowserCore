@@ -70,7 +70,7 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
         imageBean.setDescription(object.optString(DESC));
         imageBean.setWidth(object.optInt(WIDTH));
         imageBean.setHeight(object.optInt(HEIGHT));
-        imageBean.setType(object.optString(TYPE));
+        imageBean.setType(object.optString(TYPExIMAGE));
         return imageBean;
     }
     

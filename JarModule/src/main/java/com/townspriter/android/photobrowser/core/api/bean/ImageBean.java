@@ -61,7 +61,7 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
         imageBean.setDescription(object.optString(DESC));
         imageBean.setWidth(object.optInt(WIDTH));
         imageBean.setHeight(object.optInt(HEIGHT));
-        imageBean.setType(object.optString(TYPE));
+        imageBean.setType(object.optString(TYPExIMAGE));
         return imageBean;
     }
     
@@ -121,7 +121,7 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
         JSONObject img=new JSONObject();
         img.put(URL,url);
         img.put(DESC,desc);
-        img.put(TYPE,type);
+        img.put(TYPExIMAGE,type);
         img.put(WIDTH,width);
         img.put(HEIGHT,height);
         return img;
@@ -136,7 +136,7 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
         }
         url=jsonObj.optString(URL);
         desc=jsonObj.optString(DESC);
-        type=jsonObj.optString(TYPE);
+        type=jsonObj.optString(TYPExIMAGE);
         width=jsonObj.optInt(WIDTH);
         height=jsonObj.optInt(HEIGHT);
     }

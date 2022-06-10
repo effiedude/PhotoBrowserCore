@@ -20,7 +20,6 @@ import com.townspriter.base.foundation.utils.collection.CollectionUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.ui.ViewUtils;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -189,22 +188,17 @@ public class PhotoBrowser extends FrameLayout
     
     public PhotoBrowser(Context context)
     {
-        super(context);
-        initData((Application)context.getApplicationContext());
-        initView();
+        this(context,null,0);
     }
     
     public PhotoBrowser(Context context,AttributeSet attrs)
     {
-        super(context,attrs);
-        initData((Application)context.getApplicationContext());
-        initView();
+        this(context,attrs,0);
     }
     
     public PhotoBrowser(Context context,AttributeSet attrs,int defStyleAttr)
     {
         super(context,attrs,defStyleAttr);
-        initData((Application)context.getApplicationContext());
         initView();
     }
     
@@ -418,11 +412,6 @@ public class PhotoBrowser extends FrameLayout
             mCurrentPageIndex=mAdapter.getCount()-1;
         }
         mViewPager.setCurrentItem(mCurrentPageIndex);
-    }
-    
-    private void initData(Application application)
-    {
-        // Foundation.init(application);
     }
     
     private void initView()

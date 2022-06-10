@@ -62,7 +62,7 @@ public class AbstractItem implements IJSONSerializable
         id=object.optString(InfoFlowJsonConstDef.ID);
         categoryId=object.optString(InfoFlowJsonConstDef.CATEGORY_ID);
         item_type=object.optInt(InfoFlowJsonConstDef.ITEM_TYPE,InfoFlowConstDef.DEFAULT_INT_VALUE);
-        recoid=object.optString(InfoFlowJsonConstDef.RECOID);
+        recoid=object.optString(InfoFlowJsonConstDef.RECORD);
         transfer_info=object.optString(InfoFlowJsonConstDef.TRANSFER_INFO);
         grab_time=object.optLong(InfoFlowJsonConstDef.GRAB_TIME);
         aggregatedId=object.optString(InfoFlowJsonConstDef.AGGREGATE_ID);
@@ -83,7 +83,7 @@ public class AbstractItem implements IJSONSerializable
         {
             jsonObject.put(InfoFlowJsonConstDef.ID,id);
             jsonObject.put(InfoFlowJsonConstDef.CATEGORY_ID,categoryId);
-            jsonObject.put(InfoFlowJsonConstDef.RECOID,recoid);
+            jsonObject.put(InfoFlowJsonConstDef.RECORD,recoid);
             jsonObject.put(InfoFlowJsonConstDef.ITEM_TYPE,item_type);
             jsonObject.put(InfoFlowJsonConstDef.STYLE_TYPE,style_type);
             jsonObject.put(InfoFlowJsonConstDef.CONTENT_SOURCE,content_source);

@@ -13,20 +13,8 @@ import com.townspriter.android.photobrowser.core.model.util.InfoFlowJsonConstDef
  */
 public interface JsonConstant extends InfoFlowJsonConstDef
 {
-    int STATUS_CODE_NORMAL=0;
-    int STATUS_CODE_OFFLINE=1;
-    int STATUS_CODE_NETWORK_ERROR=2110001;
-    String JSON_KEY_IMAGES="images";
     String JSON_KEY_CODE="code";
-    String JSON_KEY_INDEX="imgIndex";
-    String JSON_KEY_SIZE="size";
-    String JSON_KEY_WIDTH="width";
-    String JSON_KEY_HEIGHT="height";
-    String JSON_KEY_TITLE="title";
-    String JSON_KEY_URL="url";
-    String JSON_KEY_DESC="desc";
-    String JSON_KEY_TYPE="type";
-    String JSON_KEY_HASH="verify_hash";
+    String JSON_KEY_INDEX="index";
     /**
      * 文章来源
      */
