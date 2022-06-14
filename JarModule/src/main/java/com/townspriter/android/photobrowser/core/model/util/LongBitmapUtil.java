@@ -7,9 +7,9 @@ import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
 import com.bumptech.glide.Glide;
 import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
+import com.townspriter.base.foundation.utils.device.DisplayUtil;
 import com.townspriter.base.foundation.utils.io.IOUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -132,6 +132,25 @@ public class LongBitmapUtil
             IOUtil.safeClose(is);
         }
         return null;
+    }
+    
+    /**
+     * 如果是大长图且对图片解码做了缩小.为了保障大长图的清晰度.进行分块加载
+     * 或者是大长图原图解码.但是图片对比于屏幕比例高度.为屏幕高度的两倍以上.这种情况为了减小内存消耗也进行分块加载
+     */
+    public static boolean shouldUsedRegionDecoder(int width,int height)
+    {
+        if(width==0||height==0)
+        {
+            return false;
+        }
+        int reqWidth=DisplayUtil.getScreenWidth();
+        int reqHeight=reqWidth*height/width;
+        int inSampleSize=LongImageDecoder.calculateInSampleSize(Math.abs(width),Math.abs(height),Math.abs(reqWidth),Math.abs(reqHeight));
+        int screenSizeDouble=DisplayUtil.getScreenHeight()*2;
+        Logger.d(TAG,"shouldUsedRegionDecoder-inSampleSize:"+inSampleSize);
+        Logger.d(TAG,"shouldUsedRegionDecoder-screenSizeDouble:"+screenSizeDouble);
+        return inSampleSize>=2||(inSampleSize==1&&reqHeight>screenSizeDouble);
     }
     
     public interface OnBitmapLoadListener

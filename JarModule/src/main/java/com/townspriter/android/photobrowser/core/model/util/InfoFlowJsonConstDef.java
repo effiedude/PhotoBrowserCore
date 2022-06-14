@@ -17,10 +17,13 @@ public interface InfoFlowJsonConstDef
     String STYLE_TYPE="style_type";
     String GRAB_TIME="grab_time";
     String URL="url";
-    String RECORD ="recoid";
+    String RECORD="recoid";
     String WIDTH="width";
     String HEIGHT="height";
-    String TYPExIMAGE ="imageType";
+    String TYPExIMAGE="imageType";
+    String TYPExGIF="gif";
+    String TYPExNORMAL="normal";
+    String TYPExLONG="long";
     String IMAGES="list";
     String TRANSFER_INFO="transfer_info";
     String AGGREGATE_ID="aggregated_id";

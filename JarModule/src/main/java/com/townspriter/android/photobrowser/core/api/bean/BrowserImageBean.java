@@ -106,17 +106,17 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
             return;
         }
         title=jsonObj.optString(TITLE);
-        if("gif".equalsIgnoreCase(getType()))
+        if(TYPExGIF.equalsIgnoreCase(getType()))
         {
-            imageType =IMAGExGIF;
+            imageType=IMAGExGIF;
         }
-        else if("long".equalsIgnoreCase(getType()))
+        else if(TYPExLONG.equalsIgnoreCase(getType()))
         {
-            imageType =IMAGExLONG;
+            imageType=IMAGExLONG;
         }
         else
         {
-            imageType =IMAGExNORMAL;
+            imageType=IMAGExNORMAL;
         }
     }
 }

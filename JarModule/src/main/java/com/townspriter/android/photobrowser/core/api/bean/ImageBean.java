@@ -7,6 +7,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.townspriter.android.photobrowser.core.model.util.IJSONSerializable;
 import com.townspriter.android.photobrowser.core.model.util.InfoFlowJsonConstDef;
+import com.townspriter.android.photobrowser.core.model.util.LongBitmapUtil;
+import com.townspriter.base.foundation.utils.bitmap.BitmapUtils;
+import com.townspriter.base.foundation.utils.log.Logger;
+import com.townspriter.base.foundation.utils.net.mime.MimeUtil;
+import com.townspriter.base.foundation.utils.text.StringUtil;
 
 /******************************************************************************
  * @Path PhotoBrowserCore:ImageBean
@@ -136,8 +141,37 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
         }
         url=jsonObj.optString(URL);
         desc=jsonObj.optString(DESC);
-        type=jsonObj.optString(TYPExIMAGE);
         width=jsonObj.optInt(WIDTH);
         height=jsonObj.optInt(HEIGHT);
+        Logger.d("ImageBean","parseFrom-widthParam:"+width);
+        Logger.d("ImageBean","parseFrom-heightParam:"+height);
+        if(width==0)
+        {
+            width=BitmapUtils.getWidth(url);
+        }
+        if(height==0)
+        {
+            height=BitmapUtils.getHeight(url);
+        }
+        Logger.d("ImageBean","parseFrom-width:"+width);
+        Logger.d("ImageBean","parseFrom-height:"+height);
+        type=jsonObj.optString(TYPExIMAGE);
+        Logger.d("ImageBean","parseFrom-typeParam:"+type);
+        if(StringUtil.isEmpty(type))
+        {
+            if(MimeUtil.isGifType(MimeUtil.guessMediaMimeType(url)))
+            {
+                type=TYPExGIF;
+            }
+            else if(LongBitmapUtil.shouldUsedRegionDecoder(width,height))
+            {
+                type=TYPExLONG;
+            }
+            else
+            {
+                type=TYPExNORMAL;
+            }
+        }
+        Logger.d("ImageBean","parseFrom-type:"+type);
     }
 }
