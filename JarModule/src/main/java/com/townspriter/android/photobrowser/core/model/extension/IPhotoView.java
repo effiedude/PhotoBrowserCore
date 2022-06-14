@@ -24,11 +24,10 @@ import android.widget.ImageView;
  */
 public interface IPhotoView
 {
-    int DEFAULT_SPLING_MIN_VELOCITY=2000;
-    float DEFAULT_MAX_SCALE=2.0f;
-    float DEFAULT_MID_SCALE=1.75f;
-    float DEFAULT_MIN_SCALE=1.0f;
-    int DEFAULT_ZOOM_DURATION=200;
+    float DEFAULTxMAXxSCALE =2.0f;
+    float DEFAULTxMIDxSCALE =1.75f;
+    float DEFAULTxMINxSCALE =1.0f;
+    int DEFAULTxZOOMxDURATION =200;
     
     /**
      * getPhotoView
@@ -58,9 +57,9 @@ public interface IPhotoView
      * setImageType 设置图片类型
      *
      * @param imageType
-     * @PhotoViewBean.IMAGE_NORMAL 0 普通图片
-     * @PhotoViewBean.IMAGE_GIF 1 动态图片
-     * @PhotoViewBean.IMAGE_LONG 2 大长图
+     * @PhotoViewBean.IMAGExNORMAL 0 普通图片
+     * @PhotoViewBean.IMAGExGIF 1 动态图片
+     * @PhotoViewBean.IMAGExLONG 2 大长图
      */
     void setImageType(int imageType);
     

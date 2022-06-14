@@ -1,10 +1,10 @@
 package com.townspriter.android.photobrowser.core.model.listener;
 /******************************************************************************
- * @Path PhotoBrowserCore:OnScrollListener
- * @Describe 图片滑动监听器
- * @Name 张飞
- * @Email zhangfei@personedu.com
- * @Data 21-4-6-下午2:42
+ * @path PhotoBrowserCore:OnScrollListener
+ * @describe 图片滑动监听器
+ * @author 张飞
+ * @email zhangfei@personedu.com
+ * @date 21-4-6-下午2:42
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */

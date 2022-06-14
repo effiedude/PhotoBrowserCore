@@ -54,11 +54,11 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     protected static final int EDGE_LEFT=0;
     protected static final int EDGE_RIGHT=1;
     protected static final int EDGE_BOTH=2;
-    public static float SCREEN_HEIGHT;
+    public static float SCREENxHEIGHT;
     /**
      * 拖动图片退出浏览器的最小拖动距离
      */
-    public static float MINIMUM_QUIT_DISTANCE;
+    public static float MINIMUMxQUITxDISTANCE;
     protected final Interpolator INTERPOLATOR=new AccelerateDecelerateInterpolator();
     /**
      * 辅助矩阵
@@ -76,14 +76,14 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     private final RectF mDisplayRect=new RectF();
     private final float[] mMatrixValues=new float[9];
     public int mScrollEdge=EDGE_BOTH;
-    protected int mZoomDuration=DEFAULT_ZOOM_DURATION;
+    protected int mZoomDuration=DEFAULTxZOOMxDURATION;
     protected boolean mAllowParentInterceptOnEdge=true;
     protected boolean mBlockParentIntercept=false;
     protected GestureService mScaleDragDetector;
     private int mImageType=0;
-    private float mMinScale=DEFAULT_MIN_SCALE;
-    private float mMidScale=DEFAULT_MID_SCALE;
-    private float mMaxScale=DEFAULT_MAX_SCALE;
+    private float mMinScale=DEFAULTxMINxSCALE;
+    private float mMidScale=DEFAULTxMIDxSCALE;
+    private float mMaxScale=DEFAULTxMAXxSCALE;
     private boolean mLastBlockParentInterceptStatus;
     private boolean mWasScaling;
     private boolean mWasDragging;
@@ -242,17 +242,17 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
         {
             return;
         }
-        if(Math.abs(draggedDistanceY)>PhotoViewEngine.MINIMUM_QUIT_DISTANCE)
+        if(Math.abs(draggedDistanceY)>PhotoViewEngine.MINIMUMxQUITxDISTANCE)
         {
             if(draggedDistanceY>0)
             {
                 // 下滑
-                onDragRelease(true,SCREEN_HEIGHT-draggedDistanceY,0);
+                onDragRelease(true,SCREENxHEIGHT-draggedDistanceY,0);
             }
             else
             {
                 // 上滑
-                onDragRelease(true,-(SCREEN_HEIGHT+draggedDistanceY),0);
+                onDragRelease(true,-(SCREENxHEIGHT+draggedDistanceY),0);
             }
         }
         else
@@ -343,7 +343,7 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     {
         if(milliseconds<0)
         {
-            milliseconds=DEFAULT_ZOOM_DURATION;
+            milliseconds=DEFAULTxZOOMxDURATION;
         }
         this.mZoomDuration=milliseconds;
     }
@@ -497,15 +497,8 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
             }
             else
             {
-                if(mSuppMatrix!=null)
-                {
-                    mSuppMatrix.setScale(scale,scale,focalX,focalY);
-                    checkAndDisplayMatrix();
-                }
-                else
-                {
-                    Logger.w(TAG,"setScale-mSuppMatrix:NULL");
-                }
+                mSuppMatrix.setScale(scale,scale,focalX,focalY);
+                checkAndDisplayMatrix();
             }
         }
         else
@@ -697,7 +690,7 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
         }
         if(getScale()==getMinimumScale()&&getImageType()!=BrowserImageBean.IMAGExLONG)
         {
-            int alphaValue=PHOTOxBGxALPHA-(int)((mDraggedDistanceY/SCREEN_HEIGHT)*PHOTOxBGxALPHA>PHOTOxBGxALPHA?PHOTOxBGxALPHA:(mDraggedDistanceY/SCREEN_HEIGHT)*PHOTOxBGxALPHA);
+            int alphaValue=PHOTOxBGxALPHA-(int)((mDraggedDistanceY/SCREENxHEIGHT)*PHOTOxBGxALPHA>PHOTOxBGxALPHA?PHOTOxBGxALPHA:(mDraggedDistanceY/SCREENxHEIGHT)*PHOTOxBGxALPHA);
             onBackgroundAlphaChangingByGesture(alphaValue);
         }
         else
@@ -1183,8 +1176,8 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     
     private void init(ImageView imageView)
     {
-        SCREEN_HEIGHT=SystemInfo.INSTANCE.getDeviceHeight(imageView.getContext());
-        MINIMUM_QUIT_DISTANCE=ResHelper.dpToPxF(80);
+        SCREENxHEIGHT=SystemInfo.INSTANCE.getDeviceHeight(imageView.getContext());
+        MINIMUMxQUITxDISTANCE=ResHelper.dpToPxF(80);
         mImageView=new WeakReference<>(imageView);
         imageView.setDrawingCacheEnabled(true);
         imageView.setOnTouchListener(this);
@@ -1232,7 +1225,7 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
                         // 向上
                         if(mScrollListener!=null)
                         {
-                            mScrollListener.onFlingUp(velocityY,velocityY);
+                            mScrollListener.onFlingUp(velocityX,velocityY);
                         }
                     }
                     else
@@ -1240,7 +1233,7 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
                         // 向下
                         if(mScrollListener!=null)
                         {
-                            mScrollListener.onFlingDown(velocityY,velocityY);
+                            mScrollListener.onFlingDown(velocityX,velocityY);
                         }
                     }
                 }

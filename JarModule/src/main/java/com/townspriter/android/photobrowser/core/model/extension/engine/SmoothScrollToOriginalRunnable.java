@@ -16,20 +16,20 @@ import android.widget.ImageView;
  */
 public class SmoothScrollToOriginalRunnable implements Runnable
 {
+    private final ImageView mImageView;
+    private final float dx;
+    private final float mDragDistance;
+    private final boolean willQuit;
+    private final AccelerateDecelerateInterpolator mInterpolator;
+    private final PhotoViewEngine engine;
     /**
      * 松开拖动的图片后.图片回弹或者退出.此时图片背景透明度变化所需时间
      */
     public long ALPHA_CHANGE_TIME=300L;
-    private final ImageView mImageView;
-    private final float dx;
     private float dy;
-    private final float mDragDistance;
     private float mTransDistance;
     private float mLastTransDistance;
     private long mStartTime=-1L;
-    private final boolean willQuit;
-    private final AccelerateDecelerateInterpolator mInterpolator;
-    private final PhotoViewEngine engine;
     
     public SmoothScrollToOriginalRunnable(boolean willQuit,float mDragDistance,float dx,ImageView imageView,PhotoViewEngine engine)
     {
@@ -68,7 +68,7 @@ public class SmoothScrollToOriginalRunnable implements Runnable
                 dy=-currentDy;
             }
         }
-        int alphaValue=(int)((Math.abs(mDragDistance)-Math.abs(mTransDistance))/PhotoViewEngine.SCREEN_HEIGHT*PhotoViewEngine.PHOTOxBGxALPHA)>PhotoViewEngine.PHOTOxBGxALPHA?PhotoViewEngine.PHOTOxBGxALPHA:(int)((Math.abs(mDragDistance)-Math.abs(mTransDistance))/PhotoViewEngine.SCREEN_HEIGHT*PhotoViewEngine.PHOTOxBGxALPHA);
+        int alphaValue=(int)((Math.abs(mDragDistance)-Math.abs(mTransDistance))/PhotoViewEngine.SCREENxHEIGHT*PhotoViewEngine.PHOTOxBGxALPHA)>PhotoViewEngine.PHOTOxBGxALPHA?PhotoViewEngine.PHOTOxBGxALPHA:(int)((Math.abs(mDragDistance)-Math.abs(mTransDistance))/PhotoViewEngine.SCREENxHEIGHT*PhotoViewEngine.PHOTOxBGxALPHA);
         if(willQuit)
         {
             engine.onBackgroundAlphaChangingByGesture(alphaValue);

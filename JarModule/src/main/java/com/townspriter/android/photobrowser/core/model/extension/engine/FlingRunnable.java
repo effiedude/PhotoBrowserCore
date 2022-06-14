@@ -8,11 +8,11 @@ import android.graphics.RectF;
 import android.widget.ImageView;
 
 /******************************************************************************
- * @Path PhotoBrowserCore:FlingRunnable
- * @Describe 图片滑动辅助类
- * @Name 张飞
- * @Email zhangfei@personedu.com
- * @Data 21-4-6-下午2:42
+ * @path FlingRunnable
+ * @describe 图片滑动辅助类
+ * @author 张飞
+ * @email zhangfei@personedu.com
+ * @date 21-4-6-下午2:42
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */

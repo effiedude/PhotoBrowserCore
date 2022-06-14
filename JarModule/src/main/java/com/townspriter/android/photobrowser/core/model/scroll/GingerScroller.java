@@ -13,7 +13,6 @@ import android.widget.OverScroller;
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */
-@TargetApi(9)
 public class GingerScroller extends BaseScrollerProxy
 {
     protected final OverScroller mScroller;

@@ -4,11 +4,11 @@ import android.content.Context;
 import android.widget.Scroller;
 
 /******************************************************************************
- * @Path PhotoBrowserCore:PreGingerScroller
- * @Describe
- * @Name 张飞
- * @Email zhangfei@personedu.com
- * @Data 21-4-6-下午2:42
+ * @path PreGingerScroller
+ * @describe
+ * @author  张飞
+ * @email zhangfei@personedu.com
+ * @date 21-4-6-下午2:42
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */

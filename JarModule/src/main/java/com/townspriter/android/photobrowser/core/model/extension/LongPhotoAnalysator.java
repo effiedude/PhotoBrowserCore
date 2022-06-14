@@ -11,11 +11,11 @@ import android.graphics.Rect;
 import android.widget.ImageView;
 
 /******************************************************************************
- * @Path PhotoBrowserCore:LongPhotoAnalysator
- * @Describe 大图长图解析器
- * @Name 张飞
- * @Email zhangfei@personedu.com
- * @Data 21-4-6-下午2:42
+ * @path LongPhotoAnalysator
+ * @describe 大图长图解析器
+ * @author  张飞
+ * @email zhangfei@personedu.com
+ * @date 21-4-6-下午2:42
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */
