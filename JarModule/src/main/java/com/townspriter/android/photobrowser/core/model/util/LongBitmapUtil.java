@@ -148,8 +148,9 @@ public class LongBitmapUtil
         int inSampleSize=LongImageDecoder.calculateInSampleSize(Math.abs(width),Math.abs(height),Math.abs(reqWidth),Math.abs(reqHeight));
         float screenSizeLimit=DisplayUtil.getScreenHeight()*2.5f;
         Logger.d(TAG,"shouldUsedRegionDecoder-inSampleSize:"+inSampleSize);
+        Logger.d(TAG,"shouldUsedRegionDecoder-reqHeight:"+reqHeight);
         Logger.d(TAG,"shouldUsedRegionDecoder-screenSizeLimit:"+screenSizeLimit);
-        return inSampleSize>=2&&reqHeight>screenSizeLimit;
+        return inSampleSize>=2&&height>screenSizeLimit;
     }
     
     public interface OnBitmapLoadListener
