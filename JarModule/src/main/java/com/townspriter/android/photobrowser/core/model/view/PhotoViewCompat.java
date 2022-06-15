@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -18,11 +19,13 @@ import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import com.townspriter.base.foundation.utils.io.IOUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.system.SystemInfo;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+
 import androidx.annotation.Nullable;
 
 /******************************************************************************
@@ -165,7 +168,7 @@ public class PhotoViewCompat extends PhotoViewProxy
          * 如果是大长图且对图片解码做了缩小.为了保障大长图的清晰度.进行分块加载
          * 或者是大长图原图解码.但是图片对比于屏幕比例高度为屏幕高度的两倍以上.这种情况为了减小内存消耗也进行分块加载
          */
-        return inSampleSize>=2||(inSampleSize==1&&reqHeight>screenSizeDouble);
+        return inSampleSize>2&&reqHeight>screenSizeDouble;
     }
     
     /**
