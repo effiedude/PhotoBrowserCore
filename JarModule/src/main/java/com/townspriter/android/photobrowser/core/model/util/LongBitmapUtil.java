@@ -116,8 +116,7 @@ public class LongBitmapUtil
             BitmapRegionDecoder regionDecoder=BitmapRegionDecoder.newInstance(is,false);
             BitmapFactory.Options options=new BitmapFactory.Options();
             options.inSampleSize=inSampleSize;
-            Bitmap bitmap=regionDecoder.decodeRegion(regionRect,options);
-            return bitmap;
+            return regionDecoder.decodeRegion(regionRect,options);
         }
         catch(Exception exception)
         {
@@ -147,10 +146,10 @@ public class LongBitmapUtil
         int reqWidth=DisplayUtil.getScreenWidth();
         int reqHeight=reqWidth*height/width;
         int inSampleSize=LongImageDecoder.calculateInSampleSize(Math.abs(width),Math.abs(height),Math.abs(reqWidth),Math.abs(reqHeight));
-        int screenSizeDouble=DisplayUtil.getScreenHeight()*2;
+        float screenSizeLimit=DisplayUtil.getScreenHeight()*2.5f;
         Logger.d(TAG,"shouldUsedRegionDecoder-inSampleSize:"+inSampleSize);
-        Logger.d(TAG,"shouldUsedRegionDecoder-screenSizeDouble:"+screenSizeDouble);
-        return inSampleSize>=2||(inSampleSize==1&&reqHeight>screenSizeDouble);
+        Logger.d(TAG,"shouldUsedRegionDecoder-screenSizeLimit:"+screenSizeLimit);
+        return inSampleSize>=2&&reqHeight>screenSizeLimit;
     }
     
     public interface OnBitmapLoadListener

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -19,13 +18,11 @@ import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import com.townspriter.base.foundation.utils.io.IOUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.system.SystemInfo;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
-
 import androidx.annotation.Nullable;
 
 /******************************************************************************
@@ -147,31 +144,6 @@ public class PhotoViewCompat extends PhotoViewProxy
     }
     
     /**
-     * ifUseRegionDecoderWhenImageLong
-     * <p>
-     * 根据图片尺寸和屏幕尺寸来决定是否使用分块加载
-     *
-     * @return
-     */
-    private boolean ifUseRegionDecoderWhenImageLong(BrowserImageBean photoViewBean)
-    {
-        if(photoViewBean==null)
-        {
-            Logger.w(TAG,"ifUseRegionDecoderWhenImageLong:NULL");
-            return false;
-        }
-        int reqWidth=SystemInfo.INSTANCE.getScreenWidth(getContext());
-        int reqHeight=reqWidth*photoViewBean.height/photoViewBean.width;
-        int inSampleSize=LongImageDecoder.calculateInSampleSize(Math.abs(photoViewBean.width),Math.abs(photoViewBean.height),Math.abs(reqWidth),Math.abs(reqHeight));
-        int screenSizeDouble=SystemInfo.INSTANCE.getDeviceHeight(getContext())*2;
-        /**
-         * 如果是大长图且对图片解码做了缩小.为了保障大长图的清晰度.进行分块加载
-         * 或者是大长图原图解码.但是图片对比于屏幕比例高度为屏幕高度的两倍以上.这种情况为了减小内存消耗也进行分块加载
-         */
-        return inSampleSize>2&&reqHeight>screenSizeDouble;
-    }
-    
-    /**
      * calculateInSampleSizeIfDecoderRegion
      * <p>
      * 在使用分块加载时计算原图的采样率.如果原图宽度小于屏幕宽度.原图采样
@@ -208,72 +180,64 @@ public class PhotoViewCompat extends PhotoViewProxy
     
     private void downloadAndShowLongImage(final BrowserImageBean photoViewBean)
     {
-        boolean useLongPhotoAnalyse=ifUseRegionDecoderWhenImageLong(photoViewBean);
-        if(useLongPhotoAnalyse)
+        // 更新图片缩放类型
+        setScaleTypeSafely(ScaleType.CENTER_CROP);
+        final LongPhotoAnalysator longPhotoAnalysator=new LongPhotoAnalysator();
+        longPhotoAnalysator.setOriginBitmapHeight(photoViewBean.height);
+        // 设置图片分块读取区域
+        Rect rect=new Rect();
+        rect.left=0;
+        rect.top=0;
+        int inSampleSize=calculateInSampleSizeIfDecoderRegion(photoViewBean);
+        longPhotoAnalysator.setInSampleSize(inSampleSize);
+        rect.right=rect.left+photoViewBean.width;
+        rect.bottom=rect.top+SystemInfo.INSTANCE.getScreenHeight(getContext());
+        longPhotoAnalysator.setRegionRect(rect);
+        setLongPhotoAnalysator(longPhotoAnalysator);
+        ThreadManager.post(ThreadManager.THREADxWORK,new Runnable()
         {
-            // 更新图片缩放类型
-            setScaleTypeSafely(ScaleType.CENTER_CROP);
-            final LongPhotoAnalysator longPhotoAnalysator=new LongPhotoAnalysator();
-            longPhotoAnalysator.setOriginBitmapHeight(photoViewBean.height);
-            // 设置图片分块读取区域
-            Rect rect=new Rect();
-            rect.left=0;
-            rect.top=0;
-            int inSampleSize=calculateInSampleSizeIfDecoderRegion(photoViewBean);
-            longPhotoAnalysator.setInSampleSize(inSampleSize);
-            rect.right=rect.left+photoViewBean.width;
-            rect.bottom=rect.top+SystemInfo.INSTANCE.getScreenHeight(getContext());
-            longPhotoAnalysator.setRegionRect(rect);
-            setLongPhotoAnalysator(longPhotoAnalysator);
-            ThreadManager.post(ThreadManager.THREADxWORK,new Runnable()
+            @Override
+            public void run()
             {
-                @Override
-                public void run()
+                FileInputStream inputStream=null;
+                Bitmap bitmap;
+                try
                 {
-                    FileInputStream inputStream=null;
-                    Bitmap bitmap;
-                    try
+                    // 长图直接下载原始图到磁盘缓存中.之后提取第一屏的数据展示
+                    File file=Glide.with(PhotoViewCompat.this).load(photoViewBean.url).downloadOnly(photoViewBean.width,photoViewBean.height).get();
+                    inputStream=new FileInputStream(file);
+                    bitmap=longPhotoAnalysator.decodeRegion(inputStream);
+                    final Bitmap finalBitmap=bitmap;
+                    mHandler.post(new Runnable()
                     {
-                        // 长图直接下载原始图到磁盘缓存中.之后提取第一屏的数据展示
-                        File file=Glide.with(PhotoViewCompat.this).load(photoViewBean.url).downloadOnly(photoViewBean.width,photoViewBean.height).get();
-                        inputStream=new FileInputStream(file);
-                        bitmap=longPhotoAnalysator.decodeRegion(inputStream);
-                        final Bitmap finalBitmap=bitmap;
-                        mHandler.post(new Runnable()
+                        @Override
+                        public void run()
                         {
-                            @Override
-                            public void run()
-                            {
-                                setImageBitmap(finalBitmap);
-                            }
-                        });
-                        mRequestListener.onResourceReady(null,null,null,null,true);
-                    }
-                    catch(InterruptedException interruptedException)
-                    {
-                        Logger.w(TAG,"bindData:InterruptedException",interruptedException);
-                        mRequestListener.onLoadFailed(null,null,null,true);
-                    }
-                    catch(FileNotFoundException fileNotFoundException)
-                    {
-                        Logger.w(TAG,"bindData:FileNotFoundException",fileNotFoundException);
-                        mRequestListener.onLoadFailed(null,null,null,true);
-                    }
-                    catch(ExecutionException executionException)
-                    {
-                        Logger.w(TAG,"bindData:ExecutionException",executionException);
-                        mRequestListener.onLoadFailed(null,null,null,true);
-                    }
-                    finally
-                    {
-                        IOUtil.safeClose(inputStream);
-                    }
+                            setImageBitmap(finalBitmap);
+                        }
+                    });
+                    mRequestListener.onResourceReady(null,null,null,null,true);
                 }
-            });
-        }
-        else
-        {
-            downloadAndShowNormalImage(photoViewBean);
-        }
+                catch(InterruptedException interruptedException)
+                {
+                    Logger.w(TAG,"bindData:InterruptedException",interruptedException);
+                    mRequestListener.onLoadFailed(null,null,null,true);
+                }
+                catch(FileNotFoundException fileNotFoundException)
+                {
+                    Logger.w(TAG,"bindData:FileNotFoundException",fileNotFoundException);
+                    mRequestListener.onLoadFailed(null,null,null,true);
+                }
+                catch(ExecutionException executionException)
+                {
+                    Logger.w(TAG,"bindData:ExecutionException",executionException);
+                    mRequestListener.onLoadFailed(null,null,null,true);
+                }
+                finally
+                {
+                    IOUtil.safeClose(inputStream);
+                }
+            }
+        });
     }
 }
