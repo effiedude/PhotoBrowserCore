@@ -1,5 +1,6 @@
 package com.townspriter.android.photobrowser.core.api.bean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -10,8 +11,10 @@ import com.townspriter.android.photobrowser.core.model.util.InfoFlowJsonConstDef
 import com.townspriter.android.photobrowser.core.model.util.LongBitmapUtil;
 import com.townspriter.base.foundation.utils.bitmap.BitmapUtils;
 import com.townspriter.base.foundation.utils.log.Logger;
+import com.townspriter.base.foundation.utils.net.URLUtil;
 import com.townspriter.base.foundation.utils.net.mime.MimeUtil;
 import com.townspriter.base.foundation.utils.text.StringUtil;
+import androidx.exifinterface.media.ExifInterface;
 
 /******************************************************************************
  * @Path PhotoBrowserCore:ImageBean
@@ -143,20 +146,48 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
         desc=jsonObj.optString(DESC);
         width=jsonObj.optInt(WIDTH);
         height=jsonObj.optInt(HEIGHT);
-        Logger.d("ImageBean","parseFrom-widthParam:"+width);
-        Logger.d("ImageBean","parseFrom-heightParam:"+height);
-        if(width==0)
+        boolean isNetUrl=URLUtil.isNetworkUrl(url);
+        Logger.d("ImageBean","parseFrom-isNetUrl:"+isNetUrl);
+        if(!isNetUrl)
         {
-            width=BitmapUtils.getWidth(url);
+            if(width==0)
+            {
+                width=BitmapUtils.getWidth(url);
+            }
+            if(height==0)
+            {
+                height=BitmapUtils.getHeight(url);
+            }
+            Logger.d("ImageBean","parseFrom-BitmapUtils.getWidth(url):"+width);
+            Logger.d("ImageBean","parseFrom-BitmapUtils.getHeight(url):"+height);
+            if(width!=0&&height!=0)
+            {
+                try
+                {
+                    ExifInterface exifInterface=new ExifInterface(url);
+                    int orientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_NORMAL);
+                    switch(orientation)
+                    {
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            @SuppressWarnings("SuspiciousNameCombination")
+                            int finalWidth=height;
+                            @SuppressWarnings("SuspiciousNameCombination")
+                            int finalHeight=width;
+                            width=finalWidth;
+                            height=finalHeight;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch(IOException exception)
+                {
+                    exception.printStackTrace();
+                }
+            }
         }
-        if(height==0)
-        {
-            height=BitmapUtils.getHeight(url);
-        }
-        Logger.d("ImageBean","parseFrom-width:"+width);
-        Logger.d("ImageBean","parseFrom-height:"+height);
         type=jsonObj.optString(TYPExIMAGE);
-        Logger.d("ImageBean","parseFrom-typeParam:"+type);
         if(StringUtil.isEmpty(type))
         {
             if(MimeUtil.isGifType(MimeUtil.guessMediaMimeType(url)))
@@ -171,7 +202,7 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
             {
                 type=TYPExNORMAL;
             }
+            Logger.d("ImageBean","parseFrom-type:"+type);
         }
-        Logger.d("ImageBean","parseFrom-type:"+type);
     }
 }
