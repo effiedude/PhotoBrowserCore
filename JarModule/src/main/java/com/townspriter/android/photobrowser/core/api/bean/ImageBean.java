@@ -166,6 +166,7 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
                 {
                     ExifInterface exifInterface=new ExifInterface(url);
                     int orientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_NORMAL);
+                    Logger.d("ImageBean","parseFrom-orientation:"+orientation);
                     switch(orientation)
                     {
                         case ExifInterface.ORIENTATION_ROTATE_90:

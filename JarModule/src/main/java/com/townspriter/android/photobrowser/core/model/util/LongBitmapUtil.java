@@ -32,6 +32,8 @@ import androidx.annotation.Nullable;
 public class LongBitmapUtil
 {
     private static final String TAG="LongBitmapUtil";
+    private static final float HEIGHTxSCALExTHRESHOLD=2.5f;
+    private static final int SAMPLExTHRESHOLD=2;
     
     /*********************************
      * @function loadBitmapByGlide
@@ -134,8 +136,9 @@ public class LongBitmapUtil
     }
     
     /**
-     * 如果是大长图且对图片解码做了缩小.为了保障大长图的清晰度.进行分块加载
-     * 或者是大长图原图解码.但是图片对比于屏幕比例高度.为屏幕高度的两倍以上.这种情况为了减小内存消耗也进行分块加载
+     * 如果是大图或长图为了保障大长图的清晰度进行分块加载
+     * 大图定义:图片宽度和高度均为屏幕宽度和高度的2倍及以上
+     * 长图定义:图片对比于屏幕比例高度(新版修改为图片原始高度)为屏幕高度的2.5倍以上
      */
     public static boolean shouldUsedRegionDecoder(int width,int height)
     {
@@ -146,11 +149,11 @@ public class LongBitmapUtil
         int reqWidth=DisplayUtil.getScreenWidth();
         int reqHeight=reqWidth*height/width;
         int inSampleSize=LongImageDecoder.calculateInSampleSize(Math.abs(width),Math.abs(height),Math.abs(reqWidth),Math.abs(reqHeight));
-        float screenSizeLimit=DisplayUtil.getScreenHeight()*2.5f;
+        float screenSizeLimit=DisplayUtil.getScreenHeight()*HEIGHTxSCALExTHRESHOLD;
         Logger.d(TAG,"shouldUsedRegionDecoder-inSampleSize:"+inSampleSize);
         Logger.d(TAG,"shouldUsedRegionDecoder-reqHeight:"+reqHeight);
         Logger.d(TAG,"shouldUsedRegionDecoder-screenSizeLimit:"+screenSizeLimit);
-        return inSampleSize>=2&&height>screenSizeLimit;
+        return inSampleSize>=SAMPLExTHRESHOLD&&height>screenSizeLimit;
     }
     
     public interface OnBitmapLoadListener
