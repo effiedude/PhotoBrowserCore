@@ -44,7 +44,7 @@ dependencies
 {
     //implementation project(':Lint:LintJar')
     //implementation fileTree(dir:"libs",include: ['*.jar','*.aar'])
-    implementation 'com.github.effiedude:PhotoBrowserCore:1.0.3'
+    implementation 'com.github.effiedude:PhotoBrowserCore:1.0.20'
 
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity
     }
     
     private void initData()
-    {}
+    {
+        // GsonUtil.toJson()
+    }
     
     private void initView()
     {}
