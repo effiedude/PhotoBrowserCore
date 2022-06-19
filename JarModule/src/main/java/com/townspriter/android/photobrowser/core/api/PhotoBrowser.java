@@ -1,7 +1,6 @@
 package com.townspriter.android.photobrowser.core.api;
 
 import java.util.List;
-
 import com.townspriter.android.photobrowser.core.R;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserArticleItem;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
@@ -11,15 +10,15 @@ import com.townspriter.android.photobrowser.core.api.listener.OnViewTapListener;
 import com.townspriter.android.photobrowser.core.api.listener.UICallback;
 import com.townspriter.android.photobrowser.core.api.view.IPhotoBrowserOverlay;
 import com.townspriter.android.photobrowser.core.model.adapter.PhotoViewPagerAdapter;
+import com.townspriter.android.photobrowser.core.model.listener.IVideoPlayer;
 import com.townspriter.android.photobrowser.core.model.listener.OnScrollListener;
 import com.townspriter.android.photobrowser.core.model.util.LogUtil;
+import com.townspriter.android.photobrowser.core.model.view.MediaViewLayout;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewCompat;
-import com.townspriter.android.photobrowser.core.model.view.PhotoViewLayout;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewPager;
 import com.townspriter.base.foundation.utils.collection.CollectionUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.ui.ViewUtils;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -28,7 +27,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -67,25 +65,25 @@ public class PhotoBrowser extends FrameLayout
         @Override
         public void onPageSelected(final int index)
         {
-            LogUtil.logD(TAG, "onPageSelected-index:"+index);
+            LogUtil.logD(TAG,"onPageSelected-index:"+index);
             if(mPhotoViewBeans==null||mPhotoViewBeans.get(index)==null)
             {
                 LogUtil.logW(TAG,"onPageSelected-mPhotoViewBeans:NULL");
                 return;
             }
-            PhotoViewLayout photoViewLayout=null;
+            MediaViewLayout mediaViewLayout=null;
             if(mAdapter!=null)
             {
-                photoViewLayout=(PhotoViewLayout)mAdapter.getPrimaryItem();
+                mediaViewLayout=(MediaViewLayout)mAdapter.getPrimaryItem();
             }
-            if(photoViewLayout==null)
+            if(mediaViewLayout==null)
             {
                 LogUtil.logW(TAG,"onPageSelected-photoViewLayout:NULL");
                 return;
             }
             // Glide.with(getContext()).load(mPhotoViewBeans.get(index).url).apply(bitmapTransform(new BlurTransformation(getContext()))).into(mBlurView);
             // 重新进入页面之后恢复到原始缩放矩阵
-            final PhotoViewCompat photoViewCompat=photoViewLayout.getPhotoView();
+            final PhotoViewCompat photoViewCompat=mediaViewLayout.getPhotoView();
             if(photoViewCompat!=null)
             {
                 photoViewCompat.resetMatrix();
@@ -205,6 +203,10 @@ public class PhotoBrowser extends FrameLayout
     {
         super.onDetachedFromWindow();
         mViewPager.removeOnPageChangeListener(mPageChangeListener);
+        if(mAdapter.getVideoPlayer()!=null)
+        {
+            mAdapter.getVideoPlayer().destroy();
+        }
     }
     
     public void bindData(@Nullable BrowserArticleItem photoViewData)
@@ -272,7 +274,7 @@ public class PhotoBrowser extends FrameLayout
     {
         if(mAdapter!=null)
         {
-            if(mCurrentPageIndex < mAdapter.getCount())
+            if(mCurrentPageIndex<mAdapter.getCount())
             {
                 if(null!=mCallback)
                 {
@@ -280,6 +282,14 @@ public class PhotoBrowser extends FrameLayout
                 }
             }
             mAdapter.deleteItem(position);
+        }
+    }
+    
+    public void setVideoPlayer(@NonNull IVideoPlayer videoPlayer)
+    {
+        if(mAdapter!=null)
+        {
+            mAdapter.setVideoPlayer(videoPlayer);
         }
     }
     

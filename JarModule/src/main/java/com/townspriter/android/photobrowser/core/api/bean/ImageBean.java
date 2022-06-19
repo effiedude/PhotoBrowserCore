@@ -30,6 +30,7 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
     public String url;
     public String desc;
     public String type;
+    public String mediaType;
     public int width;
     public int height;
     
@@ -69,7 +70,8 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
         imageBean.setDescription(object.optString(DESC));
         imageBean.setWidth(object.optInt(WIDTH));
         imageBean.setHeight(object.optInt(HEIGHT));
-        imageBean.setType(object.optString(TYPExIMAGE));
+        imageBean.setType(object.optString(PARAMxIMAGExTYPE));
+        imageBean.setType(object.optString(PARAMxMEDIAxTYPE));
         return imageBean;
     }
     
@@ -129,7 +131,8 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
         JSONObject img=new JSONObject();
         img.put(URL,url);
         img.put(DESC,desc);
-        img.put(TYPExIMAGE,type);
+        img.put(PARAMxIMAGExTYPE,type);
+        img.put(PARAMxMEDIAxTYPE,mediaType);
         img.put(WIDTH,width);
         img.put(HEIGHT,height);
         return img;
@@ -188,22 +191,23 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
                 }
             }
         }
-        type=jsonObj.optString(TYPExIMAGE);
+        type=jsonObj.optString(PARAMxIMAGExTYPE);
         if(StringUtil.isEmpty(type))
         {
             if(MimeUtil.isGifType(MimeUtil.guessMediaMimeType(url)))
             {
-                type=TYPExGIF;
+                type=IMAGExTYPExGIF;
             }
             else if(LongBitmapUtil.shouldUsedRegionDecoder(width,height))
             {
-                type=TYPExLONG;
+                type=IMAGExTYPExLONG;
             }
             else
             {
-                type=TYPExNORMAL;
+                type=IMAGExTYPExNORMAL;
             }
             Logger.d("ImageBean","parseFrom-type:"+type);
         }
+        mediaType=jsonObj.optString(PARAMxMEDIAxTYPE);
     }
 }

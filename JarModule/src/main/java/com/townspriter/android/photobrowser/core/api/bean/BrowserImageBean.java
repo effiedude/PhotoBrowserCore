@@ -70,7 +70,7 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
         imageBean.setDescription(object.optString(DESC));
         imageBean.setWidth(object.optInt(WIDTH));
         imageBean.setHeight(object.optInt(HEIGHT));
-        imageBean.setType(object.optString(TYPExIMAGE));
+        imageBean.setType(object.optString(PARAMxIMAGExTYPE));
         return imageBean;
     }
     
@@ -106,11 +106,11 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
             return;
         }
         title=jsonObj.optString(TITLE);
-        if(TYPExGIF.equalsIgnoreCase(getType()))
+        if(IMAGExTYPExGIF.equalsIgnoreCase(getType()))
         {
             imageType=IMAGExGIF;
         }
-        else if(TYPExLONG.equalsIgnoreCase(getType()))
+        else if(IMAGExTYPExLONG.equalsIgnoreCase(getType()))
         {
             imageType=IMAGExLONG;
         }

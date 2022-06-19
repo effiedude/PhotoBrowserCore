@@ -3,40 +3,55 @@ package com.townspriter.android.photobrowser.core.model.view;
 import com.bumptech.glide.Glide;
 import com.townspriter.android.photobrowser.core.R;
 import com.townspriter.android.photobrowser.core.api.view.IPhotoBrowserOverlay;
+import com.townspriter.android.photobrowser.core.model.listener.IVideoPlayer;
 import com.townspriter.android.photobrowser.core.model.listener.OnPhotoLoadListener;
 import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.net.NetworkUtil;
 import com.townspriter.base.foundation.utils.ui.ResHelper;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /******************************************************************************
- * @Path PhotoBrowserCore:PhotoViewLayout
- * @Describe 容器类
- * @Name 张飞
- * @Email zhangfei@personedu.com
- * @Data 21-4-6-下午2:42
+ * @path MediaViewLayout
+ * @describe 容器类
+ * @author 张飞
+ * @email zhangfei@personedu.com
+ * @date 21-4-6-下午2:42
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */
-public class PhotoViewLayout extends RelativeLayout implements OnPhotoLoadListener
+@SuppressLint("ViewConstructor")
+public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListener
 {
-    private final String TAG="PhotoViewLayout";
+    private final String TAG="MediaViewLayout";
     private final IPhotoBrowserOverlay mBrowserOverlay;
     private PhotoViewCompat mPhotoView;
+    private @Nullable VideoView videoView;
     private ViewGroup mFailView;
     private ViewGroup mPhotoNetworkErrorPage;
     private ViewGroup mLoadingView;
     private ViewGroup mBrowserLoadingPage;
     
-    public PhotoViewLayout(Context context,IPhotoBrowserOverlay browserOverlay)
+    public MediaViewLayout(Context context,IPhotoBrowserOverlay browserOverlay)
     {
         super(context);
         mBrowserOverlay=browserOverlay;
         initView();
+    }
+    
+    public void addVideoView(@NonNull IVideoPlayer videoPlayer)
+    {
+        videoView=new VideoView(getContext());
+        videoView.setVideoPlayer(videoPlayer);
+        LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
+        addView(videoView,layoutParams);
     }
     
     public void bindPhotoView()
@@ -113,6 +128,20 @@ public class PhotoViewLayout extends RelativeLayout implements OnPhotoLoadListen
             removeView(mPhotoView);
             // 停止加载此控件的图片
             Glide.with(getContext()).clear(mPhotoView);
+        }
+    }
+    
+    public @Nullable VideoView getVideoView()
+    {
+        return videoView;
+    }
+    
+    public void clearVideoView()
+    {
+        Logger.i(TAG,"clearVideoView");
+        if(videoView!=null)
+        {
+            removeView(videoView);
         }
     }
     

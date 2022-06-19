@@ -3,14 +3,17 @@ package com.townspriter.android.photobrowser.core.model.adapter;
 import java.util.List;
 
 import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
+import com.townspriter.android.photobrowser.core.api.bean.ImageBean;
 import com.townspriter.android.photobrowser.core.api.listener.OnGestureListener;
 import com.townspriter.android.photobrowser.core.api.listener.OnPhotoTapListener;
 import com.townspriter.android.photobrowser.core.api.listener.OnViewTapListener;
 import com.townspriter.android.photobrowser.core.api.listener.UICallback;
 import com.townspriter.android.photobrowser.core.api.view.IPhotoBrowserOverlay;
+import com.townspriter.android.photobrowser.core.model.listener.IVideoPlayer;
 import com.townspriter.android.photobrowser.core.model.listener.OnScrollListener;
+import com.townspriter.android.photobrowser.core.model.util.LogUtil;
+import com.townspriter.android.photobrowser.core.model.view.MediaViewLayout;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewCompat;
-import com.townspriter.android.photobrowser.core.model.view.PhotoViewLayout;
 import com.townspriter.base.foundation.utils.collection.CollectionUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 
@@ -36,6 +39,7 @@ public class PhotoViewPagerAdapter extends PagerAdapter
 {
     private final String TAG="PhotoViewPagerAdapter";
     private final Context mContext;
+    private int lastPosition=-1;
     private List<BrowserImageBean> mPhotoViewBeans;
     private View mCurrentView;
     private IPhotoBrowserOverlay mBrowserOverlay;
@@ -45,6 +49,7 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     private OnScrollListener mScrollListener;
     private OnViewTapListener mViewTapListener;
     private OnPhotoTapListener mPhotoTapListener;
+    private @Nullable IVideoPlayer videoPlayer;
     
     public PhotoViewPagerAdapter(Context context)
     {
@@ -80,19 +85,19 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     
     public void reloadPhoto(@NonNull BrowserImageBean photoViewBean)
     {
-        PhotoViewLayout photoViewLayout=(PhotoViewLayout)mCurrentView;
-        if(photoViewLayout==null)
+        MediaViewLayout mediaViewLayout=(MediaViewLayout)mCurrentView;
+        if(mediaViewLayout==null)
         {
             Logger.w(TAG,"reloadPhoto-photoViewLayout:NULL");
             return;
         }
         // 重新进入页面之后恢复到原始缩放矩阵
-        if(photoViewLayout.getPhotoView()==null)
+        if(mediaViewLayout.getPhotoView()==null)
         {
             Logger.w(TAG,"reloadPhoto-photoViewLayout.getPhotoView():NULL");
-            photoViewLayout.bindPhotoView();
+            mediaViewLayout.bindPhotoView();
         }
-        photoViewLayout.getPhotoView().bindData(photoViewBean);
+        mediaViewLayout.getPhotoView().bindData(photoViewBean);
     }
     
     public View getPrimaryItem()
@@ -125,6 +130,16 @@ public class PhotoViewPagerAdapter extends PagerAdapter
         mPhotoTapListener=listener;
     }
     
+    public @Nullable IVideoPlayer getVideoPlayer()
+    {
+        return videoPlayer;
+    }
+    
+    public void setVideoPlayer(@Nullable IVideoPlayer videoPlayer)
+    {
+        this.videoPlayer=videoPlayer;
+    }
+    
     @Override
     public int getCount()
     {
@@ -141,29 +156,44 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     @NonNull
     public Object instantiateItem(@NonNull ViewGroup container,int position)
     {
-        PhotoViewLayout photoViewLayout=new PhotoViewLayout(mContext,mBrowserOverlay);
+        MediaViewLayout mediaViewLayout=new MediaViewLayout(mContext,mBrowserOverlay);
         if(!CollectionUtil.isEmpty(mPhotoViewBeans)&&position<mPhotoViewBeans.size())
         {
             ViewGroup.LayoutParams photoViewLayoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
-            photoViewLayout.setLayoutParams(photoViewLayoutParams);
-            container.addView(photoViewLayout);
-            displayPhotoView(mPhotoViewBeans.get(position),photoViewLayout);
+            mediaViewLayout.setLayoutParams(photoViewLayoutParams);
+            container.addView(mediaViewLayout);
+            if(ImageBean.MEDIAxTYPExVIDEO.equals(mPhotoViewBeans.get(position).mediaType)&&videoPlayer!=null)
+            {
+                videoPlayer.bindData(mPhotoViewBeans.get(position).url);
+                mediaViewLayout.addVideoView(videoPlayer);
+            }
+            else
+            {
+                displayPhotoView(mPhotoViewBeans.get(position),mediaViewLayout);
+            }
         }
         else
         {
             Logger.w(TAG,"instantiateItem:FAIL");
         }
-        return photoViewLayout;
+        return mediaViewLayout;
     }
     
     @Override
     public void destroyItem(@NonNull ViewGroup container,int position,@NonNull Object object)
     {
         Logger.i(TAG,"destroyItem:"+position);
-        if(object instanceof PhotoViewLayout)
+        if(object instanceof MediaViewLayout)
         {
-            PhotoViewLayout target=(PhotoViewLayout)object;
-            target.clearPhotoView();
+            MediaViewLayout target=(MediaViewLayout)object;
+            if(ImageBean.MEDIAxTYPExVIDEO.equals(mPhotoViewBeans.get(position).mediaType)&&videoPlayer!=null)
+            {
+                target.clearVideoView();
+            }
+            else
+            {
+                target.clearPhotoView();
+            }
             container.removeView(target);
         }
     }
@@ -171,12 +201,36 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     @Override
     public void setPrimaryItem(@NonNull ViewGroup container,int position,@NonNull Object object)
     {
-        Logger.i(TAG,"setPrimaryItem:"+position);
-        mCurrentView=(View)object;
-        // 切换页面之后在此处更新当前的图片并回调
-        if(null!=mCallback)
+        if(lastPosition!=position)
         {
-            mCallback.onPhotoSelected(getPhoto());
+            lastPosition=position;
+            mCurrentView=(View)object;
+            if(ImageBean.MEDIAxTYPExVIDEO.equals(mPhotoViewBeans.get(position).mediaType)&&videoPlayer!=null)
+            {
+                if(object instanceof MediaViewLayout)
+                {
+                    MediaViewLayout target=(MediaViewLayout)object;
+                    if(target.getVideoView()!=null&&videoPlayer!=null)
+                    {
+                        videoPlayer.bindView(target.getVideoView());
+                        videoPlayer.play(mPhotoViewBeans.get(position).url);
+                        LogUtil.logD(TAG,"setPrimaryItem-videoUrl:"+mPhotoViewBeans.get(position).url);
+                    }
+                }
+            }
+            else
+            {
+                if(videoPlayer!=null)
+                {
+                    videoPlayer.unbindView();
+                    videoPlayer.stop();
+                }
+                // 切换页面之后在此处更新当前的图片并回调
+                if(null!=mCallback)
+                {
+                    mCallback.onPhotoSelected(getPhoto());
+                }
+            }
         }
     }
     
@@ -187,50 +241,50 @@ public class PhotoViewPagerAdapter extends PagerAdapter
         return POSITION_NONE;
     }
     
-    private void displayPhotoView(BrowserImageBean photoViewBean,PhotoViewLayout photoViewLayout)
+    private void displayPhotoView(BrowserImageBean photoViewBean,MediaViewLayout mediaViewLayout)
     {
         if(photoViewBean==null)
         {
             Logger.w(TAG,"displayPhotoView-photoViewBean:NULL");
             return;
         }
-        if(photoViewLayout.getPhotoView()==null)
+        if(mediaViewLayout.getPhotoView()==null)
         {
-            photoViewLayout.bindPhotoView();
+            mediaViewLayout.bindPhotoView();
         }
-        photoViewLayout.getPhotoView().bindData(photoViewBean);
+        mediaViewLayout.getPhotoView().bindData(photoViewBean);
         if(null!=mGestureListener)
         {
-            photoViewLayout.getPhotoView().setGestureListener(mGestureListener);
+            mediaViewLayout.getPhotoView().setGestureListener(mGestureListener);
         }
         if(null!=mLongClickListener)
         {
-            photoViewLayout.getPhotoView().setLongClickListener(mLongClickListener);
+            mediaViewLayout.getPhotoView().setLongClickListener(mLongClickListener);
         }
         if(null!=mScrollListener)
         {
-            photoViewLayout.getPhotoView().setScrollListener(mScrollListener);
+            mediaViewLayout.getPhotoView().setScrollListener(mScrollListener);
         }
         if(null!=mViewTapListener)
         {
-            photoViewLayout.getPhotoView().setViewTapListener(mViewTapListener);
+            mediaViewLayout.getPhotoView().setViewTapListener(mViewTapListener);
         }
         if(null!=mPhotoTapListener)
         {
-            photoViewLayout.getPhotoView().setPhotoTapListener(mPhotoTapListener);
+            mediaViewLayout.getPhotoView().setPhotoTapListener(mPhotoTapListener);
         }
     }
     
     private @Nullable Drawable getPhoto()
     {
-        PhotoViewLayout photoViewLayout=(PhotoViewLayout)mCurrentView;
-        if(photoViewLayout==null)
+        MediaViewLayout mediaViewLayout=(MediaViewLayout)mCurrentView;
+        if(mediaViewLayout==null)
         {
             Logger.w(TAG,"getPhoto-photoViewLayout:NULL");
             return null;
         }
         // 重新进入页面之后恢复到原始缩放矩阵
-        PhotoViewCompat photoViewCompat=photoViewLayout.getPhotoView();
+        PhotoViewCompat photoViewCompat=mediaViewLayout.getPhotoView();
         if(photoViewCompat!=null)
         {
             return photoViewCompat.getDrawable();

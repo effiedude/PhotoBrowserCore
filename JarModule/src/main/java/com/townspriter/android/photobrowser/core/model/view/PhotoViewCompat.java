@@ -13,7 +13,6 @@ import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
 import com.townspriter.android.photobrowser.core.model.extension.IPhotoView;
 import com.townspriter.android.photobrowser.core.model.extension.LongPhotoAnalysator;
 import com.townspriter.android.photobrowser.core.model.listener.OnPhotoLoadListener;
-import com.townspriter.android.photobrowser.core.model.util.LongImageDecoder;
 import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import com.townspriter.base.foundation.utils.io.IOUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
