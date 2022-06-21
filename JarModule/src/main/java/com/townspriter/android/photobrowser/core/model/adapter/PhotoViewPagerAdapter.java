@@ -183,10 +183,10 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     public void destroyItem(@NonNull ViewGroup container,int position,@NonNull Object object)
     {
         Logger.i(TAG,"destroyItem:"+position);
-        if(object instanceof MediaViewLayout)
+        if(object instanceof MediaViewLayout&&position<mPhotoViewBeans.size()-1)
         {
             MediaViewLayout target=(MediaViewLayout)object;
-            if(ImageBean.MEDIAxTYPExVIDEO.equals(mPhotoViewBeans.get(position).mediaType)&&videoPlayer!=null)
+            if(ImageBean.MEDIAxTYPExVIDEO.equals(mPhotoViewBeans.get(position).mediaType)&&videoPlayer==null)
             {
                 target.clearVideoView();
             }
