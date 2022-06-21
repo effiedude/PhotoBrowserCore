@@ -30,4 +30,6 @@ public interface IVideoPlayer
     void stop();
     
     void destroy();
+
+    long getDuration();
 }

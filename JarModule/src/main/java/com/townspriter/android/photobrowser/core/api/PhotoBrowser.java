@@ -1,6 +1,7 @@
 package com.townspriter.android.photobrowser.core.api;
 
 import java.util.List;
+
 import com.townspriter.android.photobrowser.core.R;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserArticleItem;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
@@ -19,6 +20,7 @@ import com.townspriter.android.photobrowser.core.model.view.PhotoViewPager;
 import com.townspriter.base.foundation.utils.collection.CollectionUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.ui.ViewUtils;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -27,6 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -78,7 +81,7 @@ public class PhotoBrowser extends FrameLayout
             }
             if(mediaViewLayout==null)
             {
-                LogUtil.logW(TAG,"onPageSelected-photoViewLayout:NULL");
+                LogUtil.logW(TAG,"onPageSelected-mediaViewLayout:NULL");
                 return;
             }
             // Glide.with(getContext()).load(mPhotoViewBeans.get(index).url).apply(bitmapTransform(new BlurTransformation(getContext()))).into(mBlurView);
@@ -291,6 +294,15 @@ public class PhotoBrowser extends FrameLayout
         {
             mAdapter.setVideoPlayer(videoPlayer);
         }
+    }
+    
+    public long getCurrentVideoDuration()
+    {
+        if(mAdapter!=null&&mAdapter.getVideoPlayer()!=null)
+        {
+            return mAdapter.getVideoPlayer().getDuration();
+        }
+        return 0;
     }
     
     /**
