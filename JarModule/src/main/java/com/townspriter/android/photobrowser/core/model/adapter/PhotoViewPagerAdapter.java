@@ -58,7 +58,6 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     
     public void deleteItem(int position)
     {
-        LogUtil.logD(TAG,"deleteItem-position:"+position);
         if(!CollectionUtil.isEmpty(mPhotoViewBeans))
         {
             mPhotoViewBeans.remove(position);
