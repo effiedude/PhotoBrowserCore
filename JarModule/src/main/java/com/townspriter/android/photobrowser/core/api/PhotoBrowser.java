@@ -18,7 +18,6 @@ import com.townspriter.android.photobrowser.core.model.view.MediaViewLayout;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewCompat;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewPager;
 import com.townspriter.base.foundation.utils.collection.CollectionUtil;
-import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.ui.ViewUtils;
 
 import android.content.Context;
@@ -74,31 +73,24 @@ public class PhotoBrowser extends FrameLayout
                 LogUtil.logW(TAG,"onPageSelected-mPhotoViewBeans:NULL");
                 return;
             }
-            MediaViewLayout mediaViewLayout=null;
+            MediaViewLayout mediaViewLayout;
             if(mAdapter!=null)
             {
                 mediaViewLayout=(MediaViewLayout)mAdapter.getPrimaryItem();
-            }
-            if(mediaViewLayout==null)
-            {
-                LogUtil.logW(TAG,"onPageSelected-mediaViewLayout:NULL");
-                return;
-            }
-            // Glide.with(getContext()).load(mPhotoViewBeans.get(index).url).apply(bitmapTransform(new BlurTransformation(getContext()))).into(mBlurView);
-            // 重新进入页面之后恢复到原始缩放矩阵
-            final PhotoViewCompat photoViewCompat=mediaViewLayout.getPhotoView();
-            if(photoViewCompat!=null)
-            {
-                photoViewCompat.resetMatrix();
-            }
-            else
-            {
-                LogUtil.logW(TAG,"onPageSelected-photoViewCompat:NULL");
-            }
-            mCurrentPageIndex=index;
-            if(null!=mCallback)
-            {
-                mCallback.onPageChanged(mAdapter.getCount(),mCurrentPageIndex+1);
+                if(mediaViewLayout!=null)
+                {
+                    // 重新进入页面之后恢复到原始缩放矩阵
+                    final PhotoViewCompat photoViewCompat=mediaViewLayout.getPhotoView();
+                    if(photoViewCompat!=null)
+                    {
+                        photoViewCompat.resetMatrix();
+                    }
+                }
+                mCurrentPageIndex=index;
+                if(mCallback!=null)
+                {
+                    mCallback.onPageChanged(mAdapter.getCount(),mCurrentPageIndex+1);
+                }
             }
         }
         
@@ -422,7 +414,6 @@ public class PhotoBrowser extends FrameLayout
         mViewPager.setAdapter(mAdapter);
         /** 图片的索引从0开始.检查索引值.限制在合理的范围内 */
         mCurrentPageIndex=browserArticleItem.imageIndex;
-        Logger.d(TAG,"dealWithData-mCurrentPageIndex:"+mCurrentPageIndex);
         if(mCurrentPageIndex<0)
         {
             mCurrentPageIndex=0;
@@ -476,10 +467,6 @@ public class PhotoBrowser extends FrameLayout
                 topParams.gravity=Gravity.TOP;
                 addView(mTopBar,topParams);
             }
-            else
-            {
-                LogUtil.logD(TAG,"initPhotoBrowserOverlay-mTopBar:NULL");
-            }
             // 底部布局
             if(null!=mBottomBar)
             {
@@ -493,10 +480,6 @@ public class PhotoBrowser extends FrameLayout
                 addView(mBottomBar,bottomParams);
                 mBottomBar.setOnTouchListener(mInfoTouchListener);
             }
-            else
-            {
-                LogUtil.logD(TAG,"initPhotoBrowserOverlay-mBottomBar:NULL");
-            }
             // 工具布局(评论/收藏/分享)
             if(null!=mToolbar)
             {
@@ -504,19 +487,11 @@ public class PhotoBrowser extends FrameLayout
                 toolbarParams.gravity=Gravity.BOTTOM;
                 addView(mToolbar,toolbarParams);
             }
-            else
-            {
-                LogUtil.logD(TAG,"initPhotoBrowserOverlay-mToolbar:NULL");
-            }
             // 图集加载失败页面
             if(null!=mBrowserLoadFailedPage)
             {
                 addView(mBrowserLoadFailedPage);
                 mBrowserLoadFailedPage.setVisibility(GONE);
-            }
-            else
-            {
-                LogUtil.logD(TAG,"initPhotoBrowserOverlay-mBrowserLoadFailedPage:NULL");
             }
             // 图集下线页面
             if(null!=mBrowserOfflinePage)
@@ -524,34 +499,18 @@ public class PhotoBrowser extends FrameLayout
                 addView(mBrowserOfflinePage);
                 mBrowserOfflinePage.setVisibility(GONE);
             }
-            else
-            {
-                LogUtil.logD(TAG,"initPhotoBrowserOverlay-mBrowserOfflinePage:NULL");
-            }
             // 图集网络错误页面
             if(null!=mBrowserNetworkErrorPage)
             {
                 addView(mBrowserNetworkErrorPage);
                 mBrowserNetworkErrorPage.setVisibility(GONE);
             }
-            else
-            {
-                LogUtil.logD(TAG,"initPhotoBrowserOverlay-mBrowserNetworkErrorPage:NULL");
-            }
             // 图集加载页面
             if(null!=mBrowserLoadingPage)
             {
                 addView(mBrowserLoadingPage);
             }
-            else
-            {
-                LogUtil.logD(TAG,"initPhotoBrowserOverlay-mBrowserLoadingPage:NULL");
-            }
             mAdapter.setPhotoBrowserOverlay(overlay);
-        }
-        else
-        {
-            LogUtil.logW(TAG,"initPhotoBrowserOverlay-overlay:NULL");
         }
     }
 }

@@ -153,7 +153,6 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
         width=jsonObj.optInt(WIDTH);
         height=jsonObj.optInt(HEIGHT);
         boolean isNetUrl=URLUtil.isNetworkUrl(url);
-        Logger.d("ImageBean","parseFrom-isNetUrl:"+isNetUrl);
         if(!isNetUrl)
         {
             if(width==0)
@@ -164,15 +163,12 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
             {
                 height=BitmapUtils.getHeight(url);
             }
-            Logger.d("ImageBean","parseFrom-BitmapUtils.getWidth():"+width);
-            Logger.d("ImageBean","parseFrom-BitmapUtils.getHeight():"+height);
             if(width!=0&&height!=0)
             {
                 try
                 {
                     ExifInterface exifInterface=new ExifInterface(url);
                     int orientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_NORMAL);
-                    Logger.d("ImageBean","parseFrom-orientation:"+orientation);
                     switch(orientation)
                     {
                         case ExifInterface.ORIENTATION_ROTATE_90:
@@ -209,7 +205,6 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
             {
                 type=IMAGExTYPExNORMAL;
             }
-            Logger.d("ImageBean","parseFrom-type:"+type);
         }
         mediaType=jsonObj.optString(PARAMxMEDIAxTYPE);
     }

@@ -9,11 +9,13 @@ import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.net.NetworkUtil;
 import com.townspriter.base.foundation.utils.ui.ResHelper;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -57,7 +59,7 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
     public void bindPhotoView()
     {
         removeAllViews();
-        setBackgroundColor(Color.TRANSPARENT);
+        setBackgroundColor(Color.BLACK);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
         mPhotoView=new PhotoViewCompat(getContext());
         mPhotoView.setBackgroundColor(Color.TRANSPARENT);
@@ -76,10 +78,6 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
                 addView(mFailView,params);
                 mFailView.setVisibility(GONE);
             }
-            else
-            {
-                Logger.w(TAG,"bindPhotoView-mFailView:NULL");
-            }
             // 图片无网页面
             mPhotoNetworkErrorPage=mBrowserOverlay.createPhotoNetworkErrorPage();
             if(null!=mPhotoNetworkErrorPage)
@@ -88,10 +86,6 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
                 params.setMargins(0,ResHelper.getDimenInt(R.dimen.browserxcorexdpx100),0,ResHelper.getDimenInt(R.dimen.browserxcorexdpx100));
                 addView(mPhotoNetworkErrorPage,params);
                 mPhotoNetworkErrorPage.setVisibility(GONE);
-            }
-            else
-            {
-                Logger.w(TAG,"bindPhotoView-mPhotoNetworkErrorPage:NULL");
             }
             // 图片加载界面
             mLoadingView=mBrowserOverlay.createPhotoLoadingLayout();
@@ -102,16 +96,8 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
                 addView(mLoadingView,params);
                 mLoadingView.setVisibility(GONE);
             }
-            else
-            {
-                Logger.w(TAG,"bindPhotoView-mLoadingView:NULL");
-            }
             // 图集加载页面
             mBrowserLoadingPage=mBrowserOverlay.createBrowserLoadingPage();
-        }
-        else
-        {
-            Logger.w(TAG,"bindPhotoView-mBrowserOverlay:NULL");
         }
     }
     
@@ -122,7 +108,6 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
     
     public void clearPhotoView()
     {
-        Logger.i(TAG,"clearPhotoView");
         if(mPhotoView!=null)
         {
             removeView(mPhotoView);
@@ -138,7 +123,6 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
     
     public void clearVideoView()
     {
-        Logger.i(TAG,"clearVideoView");
         if(videoView!=null)
         {
             removeView(videoView);
@@ -149,7 +133,6 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
     @Override
     public void onPhotoLoadFailed()
     {
-        Logger.i(TAG,"onPhotoLoadFailed");
         ThreadManager.post(ThreadManager.THREADxUI,new Runnable()
         {
             @Override
@@ -184,7 +167,6 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
     @Override
     public void onPhotoLoadSucceed()
     {
-        Logger.i(TAG,"onPhotoLoadSucceed");
         ThreadManager.post(ThreadManager.THREADxUI,new Runnable()
         {
             @Override
@@ -213,7 +195,6 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
     @Override
     public void onPhotoLoading(int progress)
     {
-        Logger.i(TAG,"onPhotoLoading");
         ThreadManager.post(ThreadManager.THREADxUI,new Runnable()
         {
             @Override

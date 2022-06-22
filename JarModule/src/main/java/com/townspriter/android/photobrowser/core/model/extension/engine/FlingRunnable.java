@@ -88,7 +88,6 @@ public class FlingRunnable implements Runnable
     {
         if(mScroller.isFinished())
         {
-            Logger.w(TAG,"run:FINISHED");
             return;
         }
         ImageView imageView=engine.getImageView();

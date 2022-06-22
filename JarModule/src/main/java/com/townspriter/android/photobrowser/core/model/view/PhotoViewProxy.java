@@ -10,7 +10,6 @@ import com.townspriter.android.photobrowser.core.model.listener.OnMatrixChangedL
 import com.townspriter.android.photobrowser.core.model.listener.OnScaleChangeListener;
 import com.townspriter.android.photobrowser.core.model.listener.OnScrollListener;
 import com.townspriter.base.foundation.utils.log.Logger;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -23,11 +22,11 @@ import android.widget.ImageView;
 import androidx.appcompat.widget.AppCompatImageView;
 
 /******************************************************************************
- * @Path PhotoBrowserCore:PhotoViewProxy
- * @Describe 图片显示器代理
- * @Name 张飞
- * @Email zhangfei@personedu.com
- * @Data 21-4-6-下午2:42
+ * @path PhotoViewProxy
+ * @describe 图片显示器代理
+ * @author 张飞
+ * @email zhangfei@personedu.com
+ * @date 21-4-6-下午2:42
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */
@@ -92,7 +91,6 @@ public class PhotoViewProxy extends AppCompatImageView implements IPhotoView
     @Override
     protected void onAttachedToWindow()
     {
-        Logger.i(TAG,"onAttachedToWindow");
         init();
         super.onAttachedToWindow();
     }
@@ -100,7 +98,6 @@ public class PhotoViewProxy extends AppCompatImageView implements IPhotoView
     @Override
     protected void onDetachedFromWindow()
     {
-        Logger.i(TAG,"onDetachedFromWindow");
         mEngine.clean();
         super.onDetachedFromWindow();
     }

@@ -1,25 +1,22 @@
 package com.townspriter.android.photobrowser.core.model.gesture;
 
 import com.townspriter.android.photobrowser.core.api.listener.OnGestureListener;
-import com.townspriter.base.foundation.utils.log.Logger;
-
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
 /******************************************************************************
- * @Path PhotoBrowserCore:PhotoGestureDetector
- * @Describe
- * @Name 张飞
- * @Email zhangfei@personedu.com
- * @Data 21-4-6-下午2:42
+ * @path PhotoBrowserCore:PhotoGestureDetector
+ * @describe
+ * @author 张飞
+ * @email zhangfei@personedu.com
+ * @date 21-4-6-下午2:42
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */
 public class PhotoGestureDetector extends TouchGestureDetector
 {
     protected final ScaleGestureDetector mDetector;
-    private final String TAG="PhotoGestureDetector";
     
     public PhotoGestureDetector(Context context)
     {
@@ -29,7 +26,6 @@ public class PhotoGestureDetector extends TouchGestureDetector
             @Override
             public boolean onScale(ScaleGestureDetector detector)
             {
-                Logger.i(TAG,"onScale");
                 // scaleFactor>0:两个手指之间的滑动距离是不断增加
                 // scaleFactor<0:两个手指之间的滑动距离是不断减少
                 float scaleFactor=detector.getScaleFactor();
@@ -51,15 +47,12 @@ public class PhotoGestureDetector extends TouchGestureDetector
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector)
             {
-                Logger.i(TAG,"onScaleBegin");
                 return true;
             }
             
             @Override
             public void onScaleEnd(ScaleGestureDetector detector)
-            {
-                Logger.i(TAG,"onScaleEnd");
-            }
+            {}
         };
         mDetector=new ScaleGestureDetector(context,mScaleListener);
     }

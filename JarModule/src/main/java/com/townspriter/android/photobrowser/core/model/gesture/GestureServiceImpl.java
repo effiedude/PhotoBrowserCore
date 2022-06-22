@@ -279,7 +279,6 @@ public class GestureServiceImpl implements GestureService
     private void dragRelease()
     {
         float adsDraggedDistanceY=Math.abs(mDraggedDistanceY);
-        Logger.d(TAG,"dragRelease-adsDraggedDistanceY:"+adsDraggedDistanceY);
         if(adsDraggedDistanceY>MINIMUM_QUIT_DISTANCE)
         {
             if(mDraggedDistanceY>0)

@@ -156,6 +156,7 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     @NonNull
     public Object instantiateItem(@NonNull ViewGroup container,int position)
     {
+        Logger.d(TAG,"instantiateItem:"+position);
         MediaViewLayout mediaViewLayout=new MediaViewLayout(mContext,mBrowserOverlay);
         if(!CollectionUtil.isEmpty(mPhotoViewBeans)&&position<mPhotoViewBeans.size())
         {
@@ -182,7 +183,7 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     @Override
     public void destroyItem(@NonNull ViewGroup container,int position,@NonNull Object object)
     {
-        Logger.i(TAG,"destroyItem:"+position);
+        Logger.d(TAG,"destroyItem:"+position);
         if(object instanceof MediaViewLayout&&position<mPhotoViewBeans.size()-1)
         {
             MediaViewLayout target=(MediaViewLayout)object;
@@ -203,32 +204,32 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     {
         if(lastPosition!=position)
         {
+            Logger.d(TAG,"setPrimaryItem:"+position);
             lastPosition=position;
             mCurrentView=(View)object;
-            if(ImageBean.MEDIAxTYPExVIDEO.equals(mPhotoViewBeans.get(position).mediaType)&&videoPlayer!=null)
+            if(object instanceof MediaViewLayout)
             {
-                if(object instanceof MediaViewLayout)
+                MediaViewLayout target=(MediaViewLayout)object;
+                if(ImageBean.MEDIAxTYPExVIDEO.equals(mPhotoViewBeans.get(position).mediaType)&&videoPlayer!=null)
                 {
-                    MediaViewLayout target=(MediaViewLayout)object;
                     if(target.getVideoView()!=null&&videoPlayer!=null)
                     {
                         videoPlayer.bindView(target.getVideoView());
                         videoPlayer.play(mPhotoViewBeans.get(position).url);
-                        LogUtil.logD(TAG,"setPrimaryItem-videoUrl:"+mPhotoViewBeans.get(position).url);
                     }
                 }
-            }
-            else
-            {
-                if(videoPlayer!=null)
+                else
                 {
-                    videoPlayer.unbindView();
-                    videoPlayer.stop();
-                }
-                // 切换页面之后在此处更新当前的图片并回调
-                if(null!=mCallback)
-                {
-                    mCallback.onPhotoSelected(getPhoto());
+                    if(videoPlayer!=null)
+                    {
+                        videoPlayer.unbindView();
+                        videoPlayer.stop();
+                    }
+                    // 切换页面之后在此处更新当前的图片并回调
+                    if(null!=mCallback)
+                    {
+                        mCallback.onPhotoSelected(getPhoto());
+                    }
                 }
             }
         }

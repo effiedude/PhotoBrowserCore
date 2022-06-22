@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -17,11 +18,14 @@ import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import com.townspriter.base.foundation.utils.io.IOUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.system.SystemInfo;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /******************************************************************************
@@ -38,7 +42,7 @@ public class PhotoViewCompat extends PhotoViewProxy
     private final String TAG="PhotoViewCompat";
     private final Handler mHandler;
     private final RequestListener mRequestListener;
-    private OnPhotoLoadListener mPhotoLoadListener;
+    private @Nullable OnPhotoLoadListener mPhotoLoadListener;
     
     public PhotoViewCompat(Context context)
     {
@@ -59,14 +63,9 @@ public class PhotoViewCompat extends PhotoViewProxy
             @Override
             public boolean onLoadFailed(@Nullable GlideException glideException,Object model,Target target,boolean isFirstResource)
             {
-                Logger.i(TAG,"onPhotoLoadFailed");
                 if(null!=mPhotoLoadListener)
                 {
                     mPhotoLoadListener.onPhotoLoadFailed();
-                }
-                else
-                {
-                    Logger.w(TAG,"onPhotoLoadFailed-mPhotoLoadListener:NULL");
                 }
                 return false;
             }
@@ -74,36 +73,23 @@ public class PhotoViewCompat extends PhotoViewProxy
             @Override
             public boolean onResourceReady(Object resource,Object model,Target target,DataSource dataSource,boolean isFirstResource)
             {
-                Logger.i(TAG,"onResourceReady");
                 // 获取当前页面的图片
                 if(null!=mPhotoLoadListener)
                 {
                     mPhotoLoadListener.onPhotoLoadSucceed();
-                }
-                else
-                {
-                    Logger.w(TAG,"onResourceReady-mPhotoLoadListener:NULL");
                 }
                 return false;
             }
         };
     }
     
-    public void setPhotoLoadListener(OnPhotoLoadListener listener)
+    public void setPhotoLoadListener(@NonNull OnPhotoLoadListener listener)
     {
-        if(null!=listener)
-        {
-            mPhotoLoadListener=listener;
-        }
-        else
-        {
-            Logger.w(TAG,"setPhotoLoadListener:NULL");
-        }
+        mPhotoLoadListener=listener;
     }
     
     public void bindData(final BrowserImageBean photoViewBean)
     {
-        Logger.i(TAG,"bindData");
         if(null!=photoViewBean)
         {
             if(null!=mPhotoLoadListener)
@@ -112,7 +98,6 @@ public class PhotoViewCompat extends PhotoViewProxy
             }
             // 更新图片类型
             setImageType(photoViewBean.getTypeInt());
-            Logger.d(TAG,"bindData-photoViewBean.getTypeInt():"+photoViewBean.getTypeInt());
             switch(photoViewBean.getTypeInt())
             {
                 case BrowserImageBean.IMAGExLONG:
@@ -126,10 +111,6 @@ public class PhotoViewCompat extends PhotoViewProxy
                     downloadAndShowNormalImage(photoViewBean);
                     break;
             }
-        }
-        else
-        {
-            Logger.w(TAG,"bindData-photoViewBean:NULL");
         }
     }
     

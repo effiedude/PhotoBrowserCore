@@ -3,7 +3,9 @@ package com.townspriter.android.photobrowser.core.model.extension.engine;
 import static android.view.MotionEvent.ACTION_CANCEL;
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_UP;
+
 import java.lang.ref.WeakReference;
+
 import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
 import com.townspriter.android.photobrowser.core.api.listener.OnGestureListener;
 import com.townspriter.android.photobrowser.core.api.listener.OnPhotoTapListener;
@@ -20,6 +22,7 @@ import com.townspriter.base.foundation.utils.lang.AssertUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.system.SystemInfo;
 import com.townspriter.base.foundation.utils.ui.ResHelper;
+
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Matrix.ScaleToFit;
@@ -160,13 +163,8 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
         checkMatrixBounds();
         setImageViewMatrix(getDrawMatrix());
         ImageView imageView=getImageView();
-        if(null==imageView)
-        {
-            Logger.w(TAG,"checkMatrixRegionBounds-imageView:NULL");
-        }
         if(longPhotoAnalysable!=null)
         {
-            Logger.d(TAG,"checkMatrixRegionBounds-getScale():"+getScale());
             longPhotoAnalysable.reloadBitmapIfNeeded(imageView,dragDistanceY/getScale());
         }
     }
@@ -277,10 +275,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
                 resetMatrix();
             }
         }
-        else
-        {
-            Logger.w(TAG,"update-imageView:NULL");
-        }
     }
     
     @Override
@@ -288,7 +282,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     {
         if(null==mImageView)
         {
-            Logger.w(TAG,"clean:NULL");
             return;
         }
         final ImageView imageView=mImageView.get();
@@ -668,7 +661,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     @Override
     public void onDrag(float mDraggedDistanceY,float dx,float dy)
     {
-        Logger.i(TAG,"onDrag");
         if(mScaleDragDetector.isScaling())
         {
             return;
@@ -726,10 +718,8 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     @Override
     public void onDragRelease(boolean willExit,float mDragDistance,float dx)
     {
-        Logger.i(TAG,"onDragRelease-willExit:"+willExit);
         if(mScaleDragDetector!=null&&mScaleDragDetector.isScaling())
         {
-            Logger.i(TAG,"onDragRelease:RETURN");
             return;
         }
         if(getScale()==getMinimumScale()&&getImageType()!=BrowserImageBean.IMAGExLONG)
@@ -738,7 +728,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
             ImageView imageView=getImageView();
             if(imageView==null)
             {
-                Logger.w(TAG,"onDragRelease-imageView:NULL");
                 return;
             }
             imageView.post(new SmoothScrollToOriginalRunnable(willExit,mDragDistance,dx,imageView,PhotoViewEngine.this));
@@ -752,7 +741,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     @Override
     public void onFling(float startX,float startY,float velocityX,float velocityY)
     {
-        Logger.i(TAG,"onFling");
         ImageView imageView=getImageView();
         mCurrentFlingRunnable=new FlingRunnable(imageView.getContext(),PhotoViewEngine.this);
         mCurrentFlingRunnable.fling(getImageViewWidth(imageView),getImageViewHeight(imageView),(int)velocityX,(int)velocityY);
@@ -774,10 +762,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
             }
             mSuppMatrix.postScale(scaleFactor,scaleFactor,focusX,focusY);
             checkAndDisplayMatrix();
-        }
-        else
-        {
-            Logger.w(TAG,"onScale:FAIL");
         }
     }
     
@@ -806,7 +790,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     @Override
     public void onExit()
     {
-        Logger.i(TAG,"onExit");
         if(mScrollListener!=null)
         {
             mScrollListener.onScrollExit();
@@ -825,17 +808,12 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
                 updateBaseMatrix(imageView.getDrawable());
             }
         }
-        else
-        {
-            Logger.w(TAG,"onGlobalLayout-imageView:NULL");
-        }
     }
     
     /**************************************** OnLayoutChangeListener ****************************************/
     @Override
     public void onLayoutChange(View view,int left,int top,int right,int bottom,int oldLeft,int oldTop,int oldRight,int oldBottom)
     {
-        Logger.i(TAG,"onLayoutChange");
         ImageView imageView=getImageView();
         if(imageView!=null)
         {
@@ -846,10 +824,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
                     updateBaseMatrix(imageView.getDrawable());
                 }
             }
-        }
-        else
-        {
-            Logger.w(TAG,"onLayoutChange-imageView:NULL");
         }
     }
     
@@ -868,13 +842,11 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
         ImageView imageView=getImageView();
         if(imageView==null)
         {
-            Logger.w(TAG,"parentDisallowInterceptTouchEvent-imageView:NULL");
             return false;
         }
         ViewParent parent=imageView.getParent();
         if(parent==null)
         {
-            Logger.w(TAG,"parentDisallowInterceptTouchEvent-parent:NULL");
             return true;
         }
         boolean didScale=mWasScaling&&mScaleDragDetector.isScaling();
@@ -900,7 +872,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
         ImageView imageView=getImageView();
         if(null==imageView)
         {
-            Logger.w(TAG,"inspectMatrixScaleType-imageView:NULL");
             return;
         }
         if(!(imageView instanceof IPhotoView))
@@ -1007,14 +978,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
                 matrix.mapRect(mDisplayRect);
                 return mDisplayRect;
             }
-            else
-            {
-                Logger.w(TAG,"getDisplayRect-drawable:NULL");
-            }
-        }
-        else
-        {
-            Logger.w(TAG,"getDisplayRect-imageView:NULL");
         }
         return null;
     }
@@ -1032,16 +995,13 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
     
     private void updateBaseMatrix(Drawable drawable)
     {
-        Logger.i(TAG,"updateBaseMatrix");
         ImageView imageView=getImageView();
         if(null==imageView)
         {
-            Logger.w(TAG,"updateBaseMatrix-imageView:NULL");
             return;
         }
         if(null==drawable)
         {
-            Logger.w(TAG,"updateBaseMatrix-drawable:NULL");
             return;
         }
         final float viewWidth=getImageViewWidth(imageView);
@@ -1163,14 +1123,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
                     imageView.setScaleType(ScaleType.MATRIX);
                 }
             }
-            else
-            {
-                Logger.w(TAG,"setScaleTypeToMatrix:类型不一致");
-            }
-        }
-        else
-        {
-            Logger.w(TAG,"setScaleTypeToMatrix-imageView:NULL");
         }
     }
     
@@ -1200,7 +1152,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
             @Override
             public void onLongPress(MotionEvent motionEvent)
             {
-                Logger.i(TAG,"init-GestureDetector:onLongPress");
                 if(null!=mLongClickListener)
                 {
                     mLongClickListener.onLongClick(getImageView());
@@ -1216,7 +1167,6 @@ public class PhotoViewEngine implements IPhotoView,View.OnTouchListener,OnGestur
             @Override
             public boolean onFling(MotionEvent motionEventBefore,MotionEvent motionEventAfter,float velocityX,float velocityY)
             {
-                Logger.i(TAG,"init-GestureDetector:onFling");
                 if(Math.abs(velocityY)>Math.abs(velocityX))
                 {
                     // 上下轻滑

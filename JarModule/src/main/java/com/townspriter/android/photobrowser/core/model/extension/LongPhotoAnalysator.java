@@ -110,7 +110,6 @@ public class LongPhotoAnalysator implements LongPhotoAnalysable
             mRegionRect.top=mOriginBitmapHeight-height;
         }
         mRegionRect.bottom=mRegionRect.top+height;
-        Logger.d(TAG,"reloadBitmapIfNeeded-mRegionRect:"+mRegionRect.toString());
         if(mRegionDecoder!=null)
         {
             try
