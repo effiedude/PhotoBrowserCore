@@ -49,6 +49,7 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
     
     public void addVideoView(@NonNull IVideoPlayer videoPlayer)
     {
+        setBackgroundColor(Color.BLACK);
         videoView=new VideoView(getContext());
         videoView.setVideoPlayer(videoPlayer);
         LayoutParams layoutParams=new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
