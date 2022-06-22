@@ -11,7 +11,6 @@ import com.townspriter.android.photobrowser.core.api.listener.UICallback;
 import com.townspriter.android.photobrowser.core.api.view.IPhotoBrowserOverlay;
 import com.townspriter.android.photobrowser.core.model.listener.IVideoPlayer;
 import com.townspriter.android.photobrowser.core.model.listener.OnScrollListener;
-import com.townspriter.android.photobrowser.core.model.util.LogUtil;
 import com.townspriter.android.photobrowser.core.model.view.MediaViewLayout;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewCompat;
 import com.townspriter.base.foundation.utils.collection.CollectionUtil;
@@ -27,11 +26,11 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 
 /******************************************************************************
- * @Path PhotoBrowserCore:PhotoViewPagerAdapter
- * @Describe 图片滑动器适配器
- * @Name 张飞
- * @Email zhangfei@personedu.com
- * @Data 21-4-6-下午2:42
+ * @path PhotoViewPagerAdapter
+ * @describe 图片滑动器适配器
+ * @author 张飞
+ * @email zhangfei@personedu.com
+ * @date 21-4-6-下午2:42
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */
@@ -88,13 +87,11 @@ public class PhotoViewPagerAdapter extends PagerAdapter
         MediaViewLayout mediaViewLayout=(MediaViewLayout)mCurrentView;
         if(mediaViewLayout==null)
         {
-            Logger.w(TAG,"reloadPhoto-photoViewLayout:NULL");
             return;
         }
         // 重新进入页面之后恢复到原始缩放矩阵
         if(mediaViewLayout.getPhotoView()==null)
         {
-            Logger.w(TAG,"reloadPhoto-photoViewLayout.getPhotoView():NULL");
             mediaViewLayout.bindPhotoView();
         }
         mediaViewLayout.getPhotoView().bindData(photoViewBean);
@@ -157,7 +154,7 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     public Object instantiateItem(@NonNull ViewGroup container,int position)
     {
         Logger.d(TAG,"instantiateItem:"+position);
-        MediaViewLayout mediaViewLayout=new MediaViewLayout(mContext,mBrowserOverlay);
+        MediaViewLayout mediaViewLayout=new MediaViewLayout(mContext,mBrowserOverlay,mPhotoViewBeans.get(position));
         if(!CollectionUtil.isEmpty(mPhotoViewBeans)&&position<mPhotoViewBeans.size())
         {
             ViewGroup.LayoutParams photoViewLayoutParams=new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
@@ -172,10 +169,6 @@ public class PhotoViewPagerAdapter extends PagerAdapter
             {
                 displayPhotoView(mPhotoViewBeans.get(position),mediaViewLayout);
             }
-        }
-        else
-        {
-            Logger.w(TAG,"instantiateItem:FAIL");
         }
         return mediaViewLayout;
     }
@@ -238,15 +231,26 @@ public class PhotoViewPagerAdapter extends PagerAdapter
     @Override
     public int getItemPosition(@NonNull Object object)
     {
-        // 解决重新加载时数据不刷新的问题
-        return POSITION_NONE;
+        if(object instanceof MediaViewLayout)
+        {
+            MediaViewLayout mediaViewLayout=(MediaViewLayout)object;
+            int index=mPhotoViewBeans.indexOf(mediaViewLayout.getData());
+            if(index!=-1)
+            {
+                return index;
+            }
+            else
+            {
+                return POSITION_NONE;
+            }
+        }
+        return super.getItemPosition(object);
     }
-    
+
     private void displayPhotoView(BrowserImageBean photoViewBean,MediaViewLayout mediaViewLayout)
     {
         if(photoViewBean==null)
         {
-            Logger.w(TAG,"displayPhotoView-photoViewBean:NULL");
             return;
         }
         if(mediaViewLayout.getPhotoView()==null)
@@ -281,7 +285,6 @@ public class PhotoViewPagerAdapter extends PagerAdapter
         MediaViewLayout mediaViewLayout=(MediaViewLayout)mCurrentView;
         if(mediaViewLayout==null)
         {
-            Logger.w(TAG,"getPhoto-photoViewLayout:NULL");
             return null;
         }
         // 重新进入页面之后恢复到原始缩放矩阵
@@ -289,10 +292,6 @@ public class PhotoViewPagerAdapter extends PagerAdapter
         if(photoViewCompat!=null)
         {
             return photoViewCompat.getDrawable();
-        }
-        else
-        {
-            Logger.w(TAG,"getPhoto-photoViewCompat:NULL");
         }
         return null;
     }

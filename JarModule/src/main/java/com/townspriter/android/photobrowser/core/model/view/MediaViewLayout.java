@@ -2,20 +2,18 @@ package com.townspriter.android.photobrowser.core.model.view;
 
 import com.bumptech.glide.Glide;
 import com.townspriter.android.photobrowser.core.R;
+import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
 import com.townspriter.android.photobrowser.core.api.view.IPhotoBrowserOverlay;
 import com.townspriter.android.photobrowser.core.model.listener.IVideoPlayer;
 import com.townspriter.android.photobrowser.core.model.listener.OnPhotoLoadListener;
 import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
-import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.net.NetworkUtil;
 import com.townspriter.base.foundation.utils.ui.ResHelper;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -31,7 +29,6 @@ import androidx.annotation.Nullable;
 @SuppressLint("ViewConstructor")
 public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListener
 {
-    private final String TAG="MediaViewLayout";
     private final IPhotoBrowserOverlay mBrowserOverlay;
     private PhotoViewCompat mPhotoView;
     private @Nullable VideoView videoView;
@@ -39,12 +36,19 @@ public class MediaViewLayout extends RelativeLayout implements OnPhotoLoadListen
     private ViewGroup mPhotoNetworkErrorPage;
     private ViewGroup mLoadingView;
     private ViewGroup mBrowserLoadingPage;
+    private final BrowserImageBean bean;
     
-    public MediaViewLayout(Context context,IPhotoBrowserOverlay browserOverlay)
+    public MediaViewLayout(Context context,IPhotoBrowserOverlay browserOverlay,BrowserImageBean bean)
     {
         super(context);
         mBrowserOverlay=browserOverlay;
+        this.bean=bean;
         initView();
+    }
+    
+    public BrowserImageBean getData()
+    {
+        return bean;
     }
     
     public void addVideoView(@NonNull IVideoPlayer videoPlayer)

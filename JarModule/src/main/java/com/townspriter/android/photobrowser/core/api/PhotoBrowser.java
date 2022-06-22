@@ -1,7 +1,6 @@
 package com.townspriter.android.photobrowser.core.api;
 
 import java.util.List;
-
 import com.townspriter.android.photobrowser.core.R;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserArticleItem;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
@@ -19,7 +18,6 @@ import com.townspriter.android.photobrowser.core.model.view.PhotoViewCompat;
 import com.townspriter.android.photobrowser.core.model.view.PhotoViewPager;
 import com.townspriter.base.foundation.utils.collection.CollectionUtil;
 import com.townspriter.base.foundation.utils.ui.ViewUtils;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -28,24 +26,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 /******************************************************************************
- * @Path PhotoBrowserCore:PhotoBrowser
- * @Describe 图片浏览器入口类
- * @Name 张飞
- * @Email zhangfei@personedu.com
- * @Data 21-4-6-下午2:42
+ * @path PhotoBrowser
+ * @describe 图片浏览器入口类
+ * @author 张飞
+ * @email zhangfei@personedu.com
+ * @date 21-4-6-下午2:42
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */
 public class PhotoBrowser extends FrameLayout
 {
+    private static final String TAG="PhotoBrowser";
     public static ViewUtils.Orientation mCurrentOrientation;
-    private final String TAG="PhotoBrowser";
     private @Nullable List<BrowserImageBean> mPhotoViewBeans;
     private PhotoViewPager mViewPager;
     private PhotoViewPagerAdapter mAdapter;
@@ -54,9 +51,7 @@ public class PhotoBrowser extends FrameLayout
     private @Nullable ViewGroup mBrowserOfflinePage;
     private @Nullable ViewGroup mBrowserLoadingPage;
     private @Nullable ViewGroup mBrowserNetworkErrorPage;
-    private @Nullable ViewGroup mTopBar;
     private @Nullable ViewGroup mBottomBar;
-    private @Nullable ViewGroup mToolbar;
     private int mCurrentPageIndex;
     private final ViewPager.OnPageChangeListener mPageChangeListener=new ViewPager.OnPageChangeListener()
     {
@@ -70,7 +65,6 @@ public class PhotoBrowser extends FrameLayout
             LogUtil.logD(TAG,"onPageSelected-index:"+index);
             if(mPhotoViewBeans==null||mPhotoViewBeans.get(index)==null)
             {
-                LogUtil.logW(TAG,"onPageSelected-mPhotoViewBeans:NULL");
                 return;
             }
             MediaViewLayout mediaViewLayout;
@@ -210,10 +204,6 @@ public class PhotoBrowser extends FrameLayout
         {
             dealWithData(photoViewData);
         }
-        else
-        {
-            LogUtil.logW(TAG,"bindData:NULL");
-        }
     }
     
     public void bindView(IPhotoBrowserOverlay overlay,UICallback callback)
@@ -245,10 +235,6 @@ public class PhotoBrowser extends FrameLayout
         if(null!=mAdapter&&mPhotoViewBeans!=null&&mPhotoViewBeans.size()>0)
         {
             mAdapter.reloadPhoto(mPhotoViewBeans.get(mCurrentPageIndex));
-        }
-        else
-        {
-            LogUtil.logW(TAG,"reloadPhoto-mAdapter:NULL");
         }
     }
     
@@ -297,13 +283,6 @@ public class PhotoBrowser extends FrameLayout
         return 0;
     }
     
-    /**
-     * showLoadingView
-     * 所有页面最上层的加载中页面
-     *
-     * @param visibility
-     * View.GONE View.VISIBLE
-     */
     public void showLoadingView(int visibility)
     {
         if(null!=mBrowserLoadingPage)
@@ -312,32 +291,14 @@ public class PhotoBrowser extends FrameLayout
         }
     }
     
-    /**
-     * showLoadFailedView
-     * 所有页面最上层的加载失败页面
-     *
-     * @param visibility
-     * View.GONE View.VISIBLE
-     */
     public void showLoadFailedView(int visibility)
     {
         if(null!=mBrowserLoadFailedPage)
         {
             mBrowserLoadFailedPage.setVisibility(visibility);
         }
-        else
-        {
-            LogUtil.logW(TAG,"showLoadFailedView-mBrowserLoadFailedPage:NULL");
-        }
     }
     
-    /**
-     * showOfflinePage
-     * 显示图集下线页面
-     *
-     * @param visibility
-     * GONE VISIBLE
-     */
     public void showOfflinePage(int visibility)
     {
         if(null!=mBrowserOfflinePage)
@@ -412,7 +373,7 @@ public class PhotoBrowser extends FrameLayout
         }
         mAdapter.setViewData(mPhotoViewBeans);
         mViewPager.setAdapter(mAdapter);
-        /** 图片的索引从0开始.检查索引值.限制在合理的范围内 */
+        /** 图片的索引从零开始检查索引值.限制在合理的范围内 */
         mCurrentPageIndex=browserArticleItem.imageIndex;
         if(mCurrentPageIndex<0)
         {
@@ -457,9 +418,9 @@ public class PhotoBrowser extends FrameLayout
             mBrowserLoadFailedPage=overlay.createBrowserLoadFailPage();
             mBrowserNetworkErrorPage=overlay.createBrowserNetworkErrorPage();
             mBrowserOfflinePage=overlay.createBrowserOfflinePage();
-            mTopBar=overlay.createTopLayout();
+            ViewGroup mTopBar=overlay.createTopLayout();
             mBottomBar=overlay.createBottomLayout();
-            mToolbar=overlay.createToolbarLayout();
+            ViewGroup mToolbar=overlay.createToolbarLayout();
             // 顶部布局
             if(null!=mTopBar)
             {
@@ -472,7 +433,7 @@ public class PhotoBrowser extends FrameLayout
             {
                 LayoutParams bottomParams=new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
                 bottomParams.gravity=Gravity.BOTTOM;
-                // 如果存在工具栏.则将底部栏放到工具栏上面
+                // 如果存在工具栏则将底部栏放到工具栏上面
                 if(null!=mToolbar)
                 {
                     bottomParams.bottomMargin=(int)getResources().getDimension(R.dimen.browserxcorexdpx53);
@@ -480,7 +441,7 @@ public class PhotoBrowser extends FrameLayout
                 addView(mBottomBar,bottomParams);
                 mBottomBar.setOnTouchListener(mInfoTouchListener);
             }
-            // 工具布局(评论/收藏/分享)
+            // 工具布局(评论收藏分享)
             if(null!=mToolbar)
             {
                 LayoutParams toolbarParams=new LayoutParams(LayoutParams.MATCH_PARENT,(int)getResources().getDimension(R.dimen.browserxcorexdpx53));
