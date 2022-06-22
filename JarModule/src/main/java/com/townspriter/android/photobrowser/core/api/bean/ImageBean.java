@@ -3,9 +3,11 @@ package com.townspriter.android.photobrowser.core.api.bean;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import com.townspriter.android.photobrowser.core.model.util.IJSONSerializable;
 import com.townspriter.android.photobrowser.core.model.util.InfoFlowJsonConstDef;
 import com.townspriter.android.photobrowser.core.model.util.LongBitmapUtil;
@@ -14,6 +16,7 @@ import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.net.URLUtil;
 import com.townspriter.base.foundation.utils.net.mime.MimeUtil;
 import com.townspriter.base.foundation.utils.text.StringUtil;
+
 import androidx.exifinterface.media.ExifInterface;
 
 /******************************************************************************
@@ -161,8 +164,8 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
             {
                 height=BitmapUtils.getHeight(url);
             }
-            Logger.d("ImageBean","parseFrom-BitmapUtils.getWidth(url):"+width);
-            Logger.d("ImageBean","parseFrom-BitmapUtils.getHeight(url):"+height);
+            Logger.d("ImageBean","parseFrom-BitmapUtils.getWidth():"+width);
+            Logger.d("ImageBean","parseFrom-BitmapUtils.getHeight():"+height);
             if(width!=0&&height!=0)
             {
                 try

@@ -5,16 +5,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutionException;
+
 import com.bumptech.glide.Glide;
 import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import com.townspriter.base.foundation.utils.device.DisplayUtil;
 import com.townspriter.base.foundation.utils.io.IOUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
 import android.graphics.Rect;
+
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -142,18 +145,15 @@ public class LongBitmapUtil
      */
     public static boolean shouldUsedRegionDecoder(int width,int height)
     {
-        if(width==0||height==0)
+        float screenSizeLimit=DisplayUtil.getScreenHeight()*HEIGHTxSCALExTHRESHOLD;
+        if(width==0||height==0||height<=screenSizeLimit)
         {
             return false;
         }
         int reqWidth=DisplayUtil.getScreenWidth();
         int reqHeight=reqWidth*height/width;
         int inSampleSize=LongImageDecoder.calculateInSampleSize(Math.abs(width),Math.abs(height),Math.abs(reqWidth),Math.abs(reqHeight));
-        float screenSizeLimit=DisplayUtil.getScreenHeight()*HEIGHTxSCALExTHRESHOLD;
-        Logger.d(TAG,"shouldUsedRegionDecoder-inSampleSize:"+inSampleSize);
-        Logger.d(TAG,"shouldUsedRegionDecoder-reqHeight:"+reqHeight);
-        Logger.d(TAG,"shouldUsedRegionDecoder-screenSizeLimit:"+screenSizeLimit);
-        return inSampleSize>=SAMPLExTHRESHOLD&&height>screenSizeLimit;
+        return inSampleSize>=SAMPLExTHRESHOLD;
     }
     
     public interface OnBitmapLoadListener
