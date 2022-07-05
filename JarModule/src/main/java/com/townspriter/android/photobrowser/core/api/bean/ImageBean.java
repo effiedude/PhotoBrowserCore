@@ -1,6 +1,5 @@
 package com.townspriter.android.photobrowser.core.api.bean;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,14 +9,10 @@ import org.json.JSONObject;
 
 import com.townspriter.android.photobrowser.core.model.util.IJSONSerializable;
 import com.townspriter.android.photobrowser.core.model.util.InfoFlowJsonConstDef;
-import com.townspriter.android.photobrowser.core.model.util.LongBitmapUtil;
 import com.townspriter.base.foundation.utils.bitmap.BitmapUtils;
-import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.net.URLUtil;
 import com.townspriter.base.foundation.utils.net.mime.MimeUtil;
 import com.townspriter.base.foundation.utils.text.StringUtil;
-
-import androidx.exifinterface.media.ExifInterface;
 
 /******************************************************************************
  * @Path PhotoBrowserCore:ImageBean
@@ -163,32 +158,6 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
             {
                 height=BitmapUtils.getHeight(url);
             }
-            if(width!=0&&height!=0)
-            {
-                try
-                {
-                    ExifInterface exifInterface=new ExifInterface(url);
-                    int orientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_NORMAL);
-                    switch(orientation)
-                    {
-                        case ExifInterface.ORIENTATION_ROTATE_90:
-                        case ExifInterface.ORIENTATION_ROTATE_270:
-                            @SuppressWarnings("SuspiciousNameCombination")
-                            int finalWidth=height;
-                            @SuppressWarnings("SuspiciousNameCombination")
-                            int finalHeight=width;
-                            width=finalWidth;
-                            height=finalHeight;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                catch(IOException exception)
-                {
-                    exception.printStackTrace();
-                }
-            }
         }
         type=jsonObj.optString(PARAMxIMAGExTYPE);
         if(StringUtil.isEmpty(type))
@@ -196,10 +165,6 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
             if(MimeUtil.isGifType(MimeUtil.guessMediaMimeType(url)))
             {
                 type=IMAGExTYPExGIF;
-            }
-            else if(LongBitmapUtil.shouldUsedRegionDecoder(width,height))
-            {
-                type=IMAGExTYPExLONG;
             }
             else
             {

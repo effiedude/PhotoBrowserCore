@@ -94,8 +94,9 @@ public class PhotoViewCompat extends PhotoViewProxy
                 mPhotoLoadListener.onPhotoLoading(0);
             }
             // 更新图片类型
-            setImageType(photoViewBean.getTypeInt());
-            switch(photoViewBean.getTypeInt())
+            int imageTypeInt = photoViewBean.getTypeInt();
+            setImageType(imageTypeInt);
+            switch(imageTypeInt)
             {
                 case BrowserImageBean.IMAGExLONG:
                     downloadAndShowLongImage(photoViewBean);

@@ -1,12 +1,18 @@
 package com.townspriter.android.photobrowser.core.api.bean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import com.townspriter.android.photobrowser.core.api.constant.JsonConstant;
+import com.townspriter.android.photobrowser.core.model.util.LongBitmapUtil;
+
 import androidx.annotation.Nullable;
+import androidx.exifinterface.media.ExifInterface;
 
 /******************************************************************************
  * @Path PhotoBrowserCore:BrowserImageBean
@@ -86,6 +92,49 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
     
     public int getTypeInt()
     {
+        if(width!=0&&height!=0)
+        {
+            try
+            {
+                ExifInterface exifInterface=new ExifInterface(url);
+                int orientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_NORMAL);
+                switch(orientation)
+                {
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        @SuppressWarnings("SuspiciousNameCombination")
+                        int finalWidth=height;
+                        @SuppressWarnings("SuspiciousNameCombination")
+                        int finalHeight=width;
+                        width=finalWidth;
+                        height=finalHeight;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch(IOException exception)
+            {
+                exception.printStackTrace();
+            }
+        }
+        if(LongBitmapUtil.shouldUsedRegionDecoder(width,height))
+        {
+            type=IMAGExTYPExLONG;
+        }
+
+        if(IMAGExTYPExGIF.equalsIgnoreCase(getType()))
+        {
+            imageType=IMAGExGIF;
+        }
+        else if(IMAGExTYPExLONG.equalsIgnoreCase(getType()))
+        {
+            imageType=IMAGExLONG;
+        }
+        else
+        {
+            imageType=IMAGExNORMAL;
+        }
         return imageType;
     }
     
@@ -106,17 +155,5 @@ public class BrowserImageBean extends ImageBean implements JsonConstant
             return;
         }
         title=jsonObj.optString(TITLE);
-        if(IMAGExTYPExGIF.equalsIgnoreCase(getType()))
-        {
-            imageType=IMAGExGIF;
-        }
-        else if(IMAGExTYPExLONG.equalsIgnoreCase(getType()))
-        {
-            imageType=IMAGExLONG;
-        }
-        else
-        {
-            imageType=IMAGExNORMAL;
-        }
     }
 }
