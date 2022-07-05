@@ -147,30 +147,33 @@ public class ImageBean implements IJSONSerializable,InfoFlowJsonConstDef
         desc=jsonObj.optString(DESC);
         width=jsonObj.optInt(WIDTH);
         height=jsonObj.optInt(HEIGHT);
-        boolean isNetUrl=URLUtil.isNetworkUrl(url);
-        if(!isNetUrl)
-        {
-            if(width==0)
-            {
-                width=BitmapUtils.getWidth(url);
-            }
-            if(height==0)
-            {
-                height=BitmapUtils.getHeight(url);
-            }
-        }
         type=jsonObj.optString(PARAMxIMAGExTYPE);
-        if(StringUtil.isEmpty(type))
+        mediaType=jsonObj.optString(PARAMxMEDIAxTYPE);
+        if(!StringUtil.isEmpty(mediaType)&&mediaType.equalsIgnoreCase(MEDIAxTYPExIMAGE))
         {
-            if(MimeUtil.isGifType(MimeUtil.guessMediaMimeType(url)))
+            boolean isNetUrl=URLUtil.isNetworkUrl(url);
+            if(!isNetUrl)
             {
-                type=IMAGExTYPExGIF;
+                if(width==0)
+                {
+                    width=BitmapUtils.getWidth(url);
+                }
+                if(height==0)
+                {
+                    height=BitmapUtils.getHeight(url);
+                }
             }
-            else
+            if(StringUtil.isEmpty(type))
             {
-                type=IMAGExTYPExNORMAL;
+                if(MimeUtil.isGifType(MimeUtil.guessMediaMimeType(url)))
+                {
+                    type=IMAGExTYPExGIF;
+                }
+                else
+                {
+                    type=IMAGExTYPExNORMAL;
+                }
             }
         }
-        mediaType=jsonObj.optString(PARAMxMEDIAxTYPE);
     }
 }
