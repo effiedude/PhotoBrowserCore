@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -11,17 +12,19 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.townspriter.android.photobrowser.core.api.bean.BrowserImageBean;
 import com.townspriter.android.photobrowser.core.model.extension.IPhotoView;
-import com.townspriter.android.photobrowser.core.model.extension.LongPhotoAnalysator;
+import com.townspriter.android.photobrowser.core.model.extension.LongPhotoAnalysis;
 import com.townspriter.android.photobrowser.core.model.listener.OnPhotoLoadListener;
 import com.townspriter.base.foundation.utils.concurrent.ThreadManager;
 import com.townspriter.base.foundation.utils.io.IOUtil;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.system.SystemInfo;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -160,18 +163,18 @@ public class PhotoViewCompat extends PhotoViewProxy
     {
         // 更新图片缩放类型
         setScaleTypeSafely(ScaleType.CENTER_CROP);
-        final LongPhotoAnalysator longPhotoAnalysator=new LongPhotoAnalysator();
-        longPhotoAnalysator.setOriginBitmapHeight(photoViewBean.height);
+        final LongPhotoAnalysis longPhotoAnalysis=new LongPhotoAnalysis();
+        longPhotoAnalysis.setOriginBitmapHeight(photoViewBean.height);
         // 设置图片分块读取区域
         Rect rect=new Rect();
         rect.left=0;
         rect.top=0;
         int inSampleSize=calculateInSampleSizeIfDecoderRegion(photoViewBean);
-        longPhotoAnalysator.setInSampleSize(inSampleSize);
+        longPhotoAnalysis.setInSampleSize(inSampleSize);
         rect.right=rect.left+photoViewBean.width;
         rect.bottom=rect.top+SystemInfo.INSTANCE.getScreenHeight(getContext());
-        longPhotoAnalysator.setRegionRect(rect);
-        setLongPhotoAnalysator(longPhotoAnalysator);
+        longPhotoAnalysis.setRegionRect(rect);
+        setLongPhotoAnalysator(longPhotoAnalysis);
         ThreadManager.post(ThreadManager.THREADxWORK,new Runnable()
         {
             @Override
@@ -184,7 +187,7 @@ public class PhotoViewCompat extends PhotoViewProxy
                     // 长图直接下载原始图到磁盘缓存中.之后提取第一屏的数据展示
                     File file=Glide.with(PhotoViewCompat.this).load(photoViewBean.url).downloadOnly(photoViewBean.width,photoViewBean.height).get();
                     inputStream=new FileInputStream(file);
-                    bitmap=longPhotoAnalysator.decodeRegion(inputStream);
+                    bitmap=longPhotoAnalysis.decodeRegion(inputStream);
                     final Bitmap finalBitmap=bitmap;
                     mHandler.post(new Runnable()
                     {

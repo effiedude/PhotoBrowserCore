@@ -11,7 +11,7 @@ import android.graphics.Rect;
 import android.widget.ImageView;
 
 /******************************************************************************
- * @path LongPhotoAnalysator
+ * @path LongPhotoAnalysis
  * @describe 大图长图解析器
  * @author  张飞
  * @email zhangfei@personedu.com
@@ -19,9 +19,9 @@ import android.widget.ImageView;
  * CopyRight(C)2021 智慧培森科技版权所有
  * *****************************************************************************
  */
-public class LongPhotoAnalysator implements LongPhotoAnalysable
+public class LongPhotoAnalysis implements LongPhotoAnalysable
 {
-    private final String TAG="LongPhotoAnalysator";
+    private final String TAG="LongPhotoAnalysis";
     private final BitmapFactory.Options mOptions=new BitmapFactory.Options();
     private int mOriginBitmapHeight;
     private volatile Rect mRegionRect;
