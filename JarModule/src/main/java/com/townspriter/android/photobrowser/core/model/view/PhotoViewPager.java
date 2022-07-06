@@ -1,12 +1,12 @@
 package com.townspriter.android.photobrowser.core.model.view;
 
 import com.townspriter.android.photobrowser.core.R;
+import com.townspriter.android.photobrowser.core.model.listener.IVideoPlayer;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.ui.ResHelper;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -30,7 +30,7 @@ public class PhotoViewPager extends ViewPager
     private static final String TAG="PhotoViewPager";
     private float mLastMotionX;
     private float mLastMotionY;
-    private @Nullable Rect mInterceptRect;
+    private @Nullable IVideoPlayer videoPlayer;
     
     public PhotoViewPager(@NonNull Context context)
     {
@@ -44,9 +44,9 @@ public class PhotoViewPager extends ViewPager
         initView();
     }
     
-    public void setInterceptRect(@NonNull Rect interceptRect)
+    public void setVideoPlayer(@NonNull IVideoPlayer videoPlayer)
     {
-        mInterceptRect=interceptRect;
+        this.videoPlayer=videoPlayer;
     }
     
     private void initView()
@@ -83,7 +83,7 @@ public class PhotoViewPager extends ViewPager
         final float x=motionEvent.getX();
         final float y=motionEvent.getY();
         // 如果子控件需要响应左右滑动可以指定滑动响应区域
-        if(mInterceptRect!=null&&mInterceptRect.contains((int)motionEvent.getRawX(),(int)motionEvent.getRawY()))
+        if(videoPlayer!=null&&videoPlayer.getInterceptRect().contains((int)motionEvent.getRawX(),(int)motionEvent.getRawY()))
         {
             return false;
         }
