@@ -3,9 +3,11 @@ package com.townspriter.android.photobrowser.core.model.view;
 import com.townspriter.android.photobrowser.core.model.listener.IVideoPlayer;
 import com.townspriter.base.foundation.utils.lifecycle.AppLifeCycleMonitor;
 import com.townspriter.base.foundation.utils.lifecycle.AppStateListener;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -22,6 +24,26 @@ import androidx.annotation.Nullable;
 public class VideoView extends FrameLayout
 {
     private @Nullable IVideoPlayer videoPlayer;
+    private final AppStateListener appStateListener=new AppStateListener()
+    {
+        @Override
+        public void onEnterBackground()
+        {
+            if(videoPlayer!=null)
+            {
+                videoPlayer.pause();
+            }
+        }
+        
+        @Override
+        public void onEnterForeground()
+        {
+            if(videoPlayer!=null)
+            {
+                videoPlayer.resume();
+            }
+        }
+    };
     
     public VideoView(@NonNull Context context)
     {
@@ -49,27 +71,15 @@ public class VideoView extends FrameLayout
         this.videoPlayer=videoPlayer;
     }
     
+    @Override
+    protected void onDetachedFromWindow()
+    {
+        super.onDetachedFromWindow();
+        AppLifeCycleMonitor.unregisterAppStateListener(appStateListener);
+    }
+    
     private void init()
     {
-        AppLifeCycleMonitor.registerAppStateListener(new AppStateListener()
-        {
-            @Override
-            public void onEnterBackground()
-            {
-                if(videoPlayer!=null)
-                {
-                    videoPlayer.pause();
-                }
-            }
-            
-            @Override
-            public void onEnterForeground()
-            {
-                if(videoPlayer!=null)
-                {
-                    videoPlayer.resume();
-                }
-            }
-        });
+        AppLifeCycleMonitor.registerAppStateListener(appStateListener);
     }
 }

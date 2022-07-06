@@ -1,5 +1,6 @@
 package com.townspriter.android.photobrowser.core.model.listener;
 
+import android.graphics.Rect;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
@@ -32,4 +33,6 @@ public interface IVideoPlayer
     void destroy();
 
     long getDuration();
+
+    Rect getInterceptRect();
 }

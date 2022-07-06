@@ -20,6 +20,7 @@ import com.townspriter.base.foundation.utils.collection.CollectionUtil;
 import com.townspriter.base.foundation.utils.ui.ViewUtils;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -272,6 +273,7 @@ public class PhotoBrowser extends FrameLayout
         {
             mAdapter.setVideoPlayer(videoPlayer);
         }
+        mViewPager.setInterceptRect(videoPlayer.getInterceptRect());
     }
     
     public long getCurrentVideoDuration()

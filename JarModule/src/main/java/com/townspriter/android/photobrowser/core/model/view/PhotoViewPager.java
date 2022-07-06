@@ -3,12 +3,15 @@ package com.townspriter.android.photobrowser.core.model.view;
 import com.townspriter.android.photobrowser.core.R;
 import com.townspriter.base.foundation.utils.log.Logger;
 import com.townspriter.base.foundation.utils.ui.ResHelper;
+
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewParent;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
@@ -27,6 +30,7 @@ public class PhotoViewPager extends ViewPager
     private static final String TAG="PhotoViewPager";
     private float mLastMotionX;
     private float mLastMotionY;
+    private @Nullable Rect mInterceptRect;
     
     public PhotoViewPager(@NonNull Context context)
     {
@@ -38,6 +42,11 @@ public class PhotoViewPager extends ViewPager
     {
         super(context,attrs);
         initView();
+    }
+    
+    public void setInterceptRect(@NonNull Rect interceptRect)
+    {
+        mInterceptRect=interceptRect;
     }
     
     private void initView()
@@ -73,17 +82,19 @@ public class PhotoViewPager extends ViewPager
         final int action=motionEvent.getAction();
         final float x=motionEvent.getX();
         final float y=motionEvent.getY();
+        // 如果子控件需要响应左右滑动可以指定滑动响应区域
+        if(mInterceptRect!=null&&mInterceptRect.contains((int)motionEvent.getRawX(),(int)motionEvent.getRawY()))
+        {
+            return false;
+        }
         switch(action)
         {
             case MotionEvent.ACTION_DOWN:
-            {
                 mLastMotionX=x;
                 mLastMotionY=y;
                 requestParentDisallowInterceptTouchEvent(true);
                 break;
-            }
             case MotionEvent.ACTION_MOVE:
-            {
                 final float xDiff=Math.abs(x-mLastMotionX);
                 final float yDiff=Math.abs(y-mLastMotionY);
                 /** 这里只需判断是否禁止父控件拦截触摸事件.因此无需考虑触摸差值 */
@@ -93,7 +104,6 @@ public class PhotoViewPager extends ViewPager
                     return true;
                 }
                 break;
-            }
             /** 不拦截以下动作.使手势完整完成 */
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
