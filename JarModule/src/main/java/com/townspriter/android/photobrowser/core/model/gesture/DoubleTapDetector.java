@@ -20,8 +20,10 @@ import android.widget.ImageView;
 public class DoubleTapDetector implements GestureDetector.OnDoubleTapListener
 {
     private final String TAG="DoubleTapDetector";
-    private final int ALPHA=255;
+    private static final int ALPHA=255;
     private PhotoViewEngine photoViewEngine;
+    private float lastDoubleX;
+    private float lastDoubleY;
     
     /**
      * @param photoViewEngine
@@ -88,11 +90,13 @@ public class DoubleTapDetector implements GestureDetector.OnDoubleTapListener
             float y=motionEvent.getY();
             if(scale<photoViewEngine.getMaximumScale())
             {
+                lastDoubleX=x;
+                lastDoubleY=y;
                 photoViewEngine.setScale(photoViewEngine.getMaximumScale(),x,y,true);
             }
             else
             {
-                photoViewEngine.setScale(photoViewEngine.getMinimumScale(),x,y,true);
+                photoViewEngine.setScale(photoViewEngine.getMinimumScale(),lastDoubleX,lastDoubleY,true);
             }
         }
         catch(ArrayIndexOutOfBoundsException arrayIndexOutOfBoundsException)
